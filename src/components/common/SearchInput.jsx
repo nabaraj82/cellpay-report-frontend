@@ -8,6 +8,7 @@ const SearchInput = ({ value, onChange, ...rest }) => {
         <FiSearch className="h-4 w-4 text-gray-400" />
       </div>
       <input
+        name="search"
         value={value}
         onChange={onChange}
         type="text"

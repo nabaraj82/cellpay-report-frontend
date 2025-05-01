@@ -35,7 +35,6 @@ const AddPrivilege = ({ privileges, setPrivileges, errors, setErrors }) => {
 
   const clearError = (privilegeIndex, fieldPath) => {
     if (!errors || !errors[`[${privilegeIndex}]`]) return;
-
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
       const privilegeKey = `[${privilegeIndex}]`;
@@ -93,7 +92,6 @@ const AddPrivilege = ({ privileges, setPrivileges, errors, setErrors }) => {
     updatedPrivileges.splice(index, 1);
     setPrivileges(updatedPrivileges);
 
-    // Clear errors for the removed privilege
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
       delete newErrors[`[${index}]`];
@@ -149,6 +147,7 @@ const AddPrivilege = ({ privileges, setPrivileges, errors, setErrors }) => {
         <div key={index} className="flex flex-col md:flex-row gap-4 md:gap-2 ">
           <div className="flex-1 md:flex-none">
             <CustomSelect
+              id="privilege"
               options={privilegeOptions}
               value={privilege.privilegeId}
               onChange={(value) => handlePrivilegeChange(index, value)}
@@ -160,6 +159,7 @@ const AddPrivilege = ({ privileges, setPrivileges, errors, setErrors }) => {
 
           <div className="flex-1 md:flex-none">
             <CustomSelect
+              id="method"
               options={methodsOptions}
               value={privilege.endPoints[0]?.method}
               onChange={(value) => handleMethodChange(index, value)}
@@ -171,6 +171,7 @@ const AddPrivilege = ({ privileges, setPrivileges, errors, setErrors }) => {
 
           <div className="flex-1 w-full">
             <Input
+              id="endpoint"
               type="text"
               value={privilege.endPoints[0]?.url || ""}
               onChange={(e) => handleUrlChange(index, e.target.value)}

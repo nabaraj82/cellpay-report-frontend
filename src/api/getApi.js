@@ -1,6 +1,6 @@
 import api from "../config/axiosConfig";
 
-export async function getApi(endpoint, params = {}, signal=null) {
+export async function getApi(endpoint, params = {}, signal = null) {
   try {
       const response = await api({
         url: endpoint,

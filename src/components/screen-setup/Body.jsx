@@ -1,39 +1,23 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { FiDelete, FiEdit } from "react-icons/fi";
-import Table from "../NormalTable/Table";
-import { deleteApi } from "../../api/deleteApi";
-import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "../../queryClient";
 import DeleteConfirmationModal from "../common/DeleteConfirmationModal";
 import { useShowModal } from "../../hooks/useShowModal";
 import ButtonSecondary from "../common/ButtonSecondary";
 import ButtonDanger from "../common/ButtonDanger";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { useRef} from "react";
 import Toast from "../common/Toast";
 import Modal from "../common/Modal";
 import Form from "./Form";
-import { useValidateForm } from "../../validations/hooks/useValidateForm";
-import screenSchema from "../../validations/schema/screenSchema";
-import { putApi } from "../../api/putApi";
 import EditButton from "../common/EditButton";
 import DeleteButton from "../common/DeleteButton";
+import { useDeleteMutation } from "../../hooks/query/common/useDeleteMutation";
+import { DataTable } from "../table/DataTable";
+import { columnHelper } from "../../util/tableHelper";
 
-const initialFormData = {
-  id: "",
-  code: "",
-  name: "",
-  description: "",
-};
+const Body = ({ data, globalFilter }) => {
 
-const Body = ({ data, isPending }) => {
-  const [itemToDelete, setItemToDelete] = useState(null);
-  const [editingScreen, setEditingScreen] = useState(initialFormData);
-  const { errors, setErrors, validateForm } = useValidateForm(
-    editingScreen,
-    screenSchema
-  );
-  const columnHelper = createColumnHelper();
+  const editScreenRef = useRef(null);
+
+  const itemToDeleteRef = useRef(null);
   const {
     isOpen: isDeleteModalOpen,
     showModal: showDeleteModal,
@@ -45,74 +29,34 @@ const Body = ({ data, isPending }) => {
     closeModal: closeEditModal,
   } = useShowModal();
 
-  const deleteMutation = useMutation({
-    mutationFn: (id) => deleteApi(`/screen/${id}`),
+  const deleteMutation = useDeleteMutation(["screen"], {
     onSuccess: () => {
-      queryClient.invalidateQueries(["screen"]);
-      setItemToDelete(null);
+      itemToDeleteRef.current = null;
       closeDeleteModal();
-      toast.error("Screen deleted successfully");
     },
-    onError: (error) => {
+    onError: () => {
       closeDeleteModal();
-      toast.error(JSON.stringify(error));
-    },
-  });
-
-  const editMutation = useMutation({
-    mutationFn: (data) => putApi("/screen", data),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["screen"]);
-      closeEditModal();
-    },
-    onError: (error) => {
-      closeEditModal();
-      toast.error(JSON.stringify(error));
     },
   });
 
   function handleDelete(id) {
-    setItemToDelete(id);
+    itemToDeleteRef.current = id;
     showDeleteModal(true);
   }
 
   function handleEdit(screenData) {
     const { id, code, name, description } = screenData;
+    editScreenRef.current = { id, code, name, description };
     showEditModal();
-    setEditingScreen({ id, code, name, description });
   }
 
   function handleCloseEdit() {
-    setErrors({});
     closeEditModal();
   }
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    if (errors[name]) {
-      setErrors((prevState) => {
-        const newErrorObj = { ...prevState };
-        delete newErrorObj[name];
-        return newErrorObj;
-      });
-    }
-    setEditingScreen((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const isValid = await validateForm();
-    if (isValid) {
-      editMutation.mutate(editingScreen);
-    }
-  }
-
   function handleConfirmDelete() {
-    if (itemToDelete) {
-      deleteMutation.mutate(itemToDelete);
+    if (itemToDeleteRef.current) {
+      deleteMutation.mutate(itemToDeleteRef.current);
     }
   }
 
@@ -153,11 +97,9 @@ const Body = ({ data, isPending }) => {
         onClose={closeEditModal}
       >
         <Form
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-          formData={editingScreen}
+          key={editScreenRef.current?.id || "update"}
+          editingData={editScreenRef.current}
           closeModal={handleCloseEdit}
-          errors={errors}
         />
       </Modal>
       <DeleteConfirmationModal
@@ -174,7 +116,14 @@ const Body = ({ data, isPending }) => {
         </div>
       </DeleteConfirmationModal>
       <section className="mt-4 overflow-x-auto">
-        <Table data={data} columns={columns} isFetching={isPending} />
+        <DataTable
+          data={data}
+          columns={columns}
+          isServerSide={false}
+          enableFuzzyFilter={true}
+          enableVirtualization={true}
+          globalFilter={globalFilter}
+        />
       </section>
     </>
   );

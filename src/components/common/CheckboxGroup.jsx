@@ -1,25 +1,18 @@
 import ErrorBlock from "./ErrorBlock";
 
-const CheckboxGroup = ({ options, label, onChange, selectedValues, error }) => {
-  const handleCheckboxChange = (id) => {
-    const newSelectedValues = selectedValues.includes(id)
-      ? selectedValues.filter((item) => item !== id)
-      : [...selectedValues, id]; 
-
-    onChange(newSelectedValues);
-  };
-
+const CheckboxGroup = ({ options, label, onChange, error }) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 text-xs">
       {label && <label className="block font-medium">{label}</label>}
       <div className="space-x-4">
         {options.map((option) => (
           <label key={option.id} className="inline-flex items-center">
             <input
+              name="checkbox"
               type="checkbox"
-              checked={selectedValues.includes(option.id)}
-              onChange={() => handleCheckboxChange(option.id)}
-              className="h-4 w-4 text-blue-600 rounded"
+              checked={option.isSelected}
+              onChange={() => onChange(option)}
+              className="h-3 w-3 text-blue-600 rounded cursor-pointer"
             />
             <span className="ml-2">{option.name}</span>
           </label>

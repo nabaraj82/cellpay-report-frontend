@@ -1,53 +1,59 @@
-import React, { useState } from "react";
-import Input from "../common/Input";
-import TextArea from "../common/TextArea";
+import React, { useEffect, useState } from "react";
 import ButtonSecondary from "../common/ButtonSecondary";
 import ButtonPrimary from "../common/ButtonPrimary";
-import { useValidateForm } from "../../validations/hooks/useValidateForm";
-import screenSchema from "../../validations/schema/screenSchema";;
-import { useCreateMutation } from "../../hooks/query/common/useCreateMutation";
+import Input from "../common/Input";
+import TextArea from "../common/TextArea";
 import { useUpdateMutation } from "../../hooks/query/common/useUpdateMutation";
+import { useCreateMutation } from "../../hooks/query/common/useCreateMutation";
+import { useValidateForm } from "../../validations/hooks/useValidateForm";
+import roleSchema from "../../validations/schema/roleSchema";
 
-const initialFormData = {
+const initialFormState = {
   id: "",
   code: "",
   name: "",
   description: "",
+  isActive: true,
 };
 
-const Form = ({ closeModal, editingData }) => {
-  const [formData, setFormData] = useState(editingData || initialFormData);
+const RoleForm = ({ editingRole, onCloseModal }) => {
+  const [formData, setFormData] = useState(initialFormState);
+
+  const updateMutation = useUpdateMutation(["role"], {
+    onSuccess: () => {
+      onCloseModal();
+    },
+  });
+
+  const createMutation = useCreateMutation(["role"], {
+    onSuccess: () => {
+      onCloseModal();
+    },
+  });
+
   const { errors, setErrors, validateForm } = useValidateForm(
     formData,
-    screenSchema
+    roleSchema
   );
-
-  const createMutation = useCreateMutation(["screen"], {
-    onSuccess: () => {
-      closeModal();
-      setFormData(initialFormData);
-    },
-    onError: () => {
-      closeModal();
-    },
-  });
-
-  const updateMutation = useUpdateMutation(["screen"], {
-    onSuccess: () => {
-      closeModal();
-    },
-    onError: () => {
-      closeModal();
-    },
-  });
+  useEffect(() => {
+    if (editingRole) {
+      setFormData({
+        id: editingRole.id,
+        code: editingRole.code,
+        name: editingRole.name,
+        description: editingRole.description,
+        isActive: editingRole.isActive,
+      });
+    }
+  }, [editingRole]);
 
   function handleChange(e) {
     const { name, value } = e.target;
     if (errors[name]) {
       setErrors((prevState) => {
-        const newErrorObj = { ...prevState };
-        delete newErrorObj[name];
-        return newErrorObj;
+        const newErrors = { ...prevState };
+        delete newErrors[name];
+        return newErrors;
       });
     }
     setFormData((prevState) => ({
@@ -59,20 +65,20 @@ const Form = ({ closeModal, editingData }) => {
   async function handleSubmit(e) {
     e.preventDefault();
     const isValid = await validateForm();
+    console.log(isValid);
     if (isValid) {
-      if (editingData) {
+      if (editingRole) {
         updateMutation.mutate(formData);
       } else {
         createMutation.mutate(formData);
       }
     }
   }
-
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-sm">
       <Input
         id="code"
-        label="Screen Code"
+        label="Role Code"
         type="text"
         value={formData.code}
         onChange={handleChange}
@@ -81,7 +87,7 @@ const Form = ({ closeModal, editingData }) => {
       />
       <Input
         id="name"
-        label="Screen Name"
+        label="Role Name"
         type="text"
         value={formData.name}
         onChange={handleChange}
@@ -98,7 +104,7 @@ const Form = ({ closeModal, editingData }) => {
         error={errors["description"]}
       />
       <div className="flex gap-8 justify-end">
-        <ButtonSecondary type="button" onClick={closeModal}>
+        <ButtonSecondary type="button" onClick={onCloseModal}>
           Cancel
         </ButtonSecondary>
         <ButtonPrimary type="submit">Save</ButtonPrimary>
@@ -107,4 +113,4 @@ const Form = ({ closeModal, editingData }) => {
   );
 };
 
-export default Form;
+export default RoleForm;

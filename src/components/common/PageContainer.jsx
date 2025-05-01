@@ -1,0 +1,11 @@
+import React from 'react'
+
+const PageContainer = ({children}) => {
+  return (
+    <section className="dark:text-gray-300">
+      {children}
+    </section>
+  );
+}
+
+export default PageContainer

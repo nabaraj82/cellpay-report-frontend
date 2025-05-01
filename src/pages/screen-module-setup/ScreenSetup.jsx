@@ -1,31 +1,22 @@
-import React, {useMemo, useState } from "react";
+import React, { useState } from "react";
 import Header from "../../components/screen-setup/Header";
 import Body from "../../components/screen-setup/Body";
-import { useGetScreen } from "../../hooks/query/useGetScreen";
+import { useGetAll } from "../../hooks/query/common/useGetAll";
+import PageContainer from "../../components/common/PageContainer";
 
 const ScreenSetup = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, isPending } = useGetScreen();
-
+  const { data } = useGetAll(["screen"]);
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredData = useMemo(() => {
-    if (isPending) return [];
-    return data.filter(
-      (item) =>
-        item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
   return (
-    <section className="dark:text-gray-300">
+    <PageContainer>
       <Header searchTerm={searchTerm} onChange={handleChange} />
-      <Body data={filteredData} isPending={isPending} />
-    </section>
+      <Body data={data || []} globalFilter={searchTerm}  />
+    </PageContainer>
   );
 };
 

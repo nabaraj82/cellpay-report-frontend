@@ -1,8 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import Badge from "../common/Badge";
-import { FiDelete, FiEdit } from "react-icons/fi";
-import Table from "../NormalTable/Table";
 import { useShowModal } from "../../hooks/useShowModal";
 import Form from "./Form";
 import Modal from "../common/Modal";
@@ -11,23 +9,31 @@ import ButtonSecondary from "../common/ButtonSecondary";
 import ButtonDanger from "../common/ButtonDanger";
 import EditButton from "../common/EditButton";
 import DeleteButton from "../common/DeleteButton";
+import { useDeleteMutation } from "../../hooks/query/common/useDeleteMutation";
+import Toast from "../common/Toast";
+import { DataTable } from "../table/DataTable";
+import { columnHelper } from "../../util/tableHelper";
 
-const Body = ({ data, isFetching }) => {
-  const [itemToDelete, setItemToDelete] = useState(null);
+const Body = ({ data, searchTerm }) => {
+  const itemToDeleteRef = useRef(null);
   const moduleIdRef = useRef(null);
-    const {
-      isOpen: isEditModalOpen,
-      showModal: showEditModal,
-      closeModal: closeEditModal,
+
+  const deleteMutation = useDeleteMutation(["module"], {
+    onSuccess: () => {
+      closeDeleteModal();
+    },
+  });
+  const {
+    isOpen: isEditModalOpen,
+    showModal: showEditModal,
+    closeModal: closeEditModal,
   } = useShowModal();
 
-   const {
-     isOpen: isDeleteModalOpen,
-     showModal: showDeleteModal,
-     closeModal: closeDeleteModal,
+  const {
+    isOpen: isDeleteModalOpen,
+    showModal: showDeleteModal,
+    closeModal: closeDeleteModal,
   } = useShowModal();
-  
-  const columnHelper = createColumnHelper();
 
   function handleEdit(module) {
     showEditModal();
@@ -39,13 +45,14 @@ const Body = ({ data, isFetching }) => {
     closeEditModal();
   }
 
-   function handleDelete(id) {
-     setItemToDelete(id);
-     showDeleteModal(true);
-   }
+  function handleDelete(id) {
+    itemToDeleteRef.current = id;
+    showDeleteModal(true);
+  }
 
   function handleConfirmDelete() {
-    
+    console.log("Delete id: ", itemToDeleteRef.current);
+    deleteMutation.mutate(itemToDeleteRef.current);
   }
 
   const columns = [
@@ -91,6 +98,7 @@ const Body = ({ data, isFetching }) => {
   ];
   return (
     <>
+      <Toast />
       <Modal
         title="Add Module"
         isOpen={isEditModalOpen}
@@ -115,7 +123,14 @@ const Body = ({ data, isFetching }) => {
         </div>
       </DeleteConfirmationModal>
       <section className="mt-4 overflow-x-auto">
-        <Table data={data} columns={columns} isFetching={isFetching} />
+        <DataTable
+          data={data}
+          columns={columns}
+          isServerSide={false}
+          enableFuzzyFilter={true}
+          enableVirtualization={true}
+          globalFilter={searchTerm}
+        />
       </section>
     </>
   );

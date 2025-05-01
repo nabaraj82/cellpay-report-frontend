@@ -1,18 +1,17 @@
-import ErrorBlock from "./ErrorBlock";
-import Label from "./Label";
+import React from 'react'
+import Label from './Label';
 
-const Input = ({ label = null, error, width, ...rest }) => {
+const DatePicker = ({ label = null, error, ...rest }) => {
   return (
     <div className="flex flex-col group text-xs">
       {label && <Label title={label} />}
       <input
         {...rest}
         className="w-full md:min-w-[20rem] duration-300 mt-1 rounded-md border px-3 py-2 outline-none focus:border-sky-500 dark:bg-transparent"
-        style={{ width: width ? `${width}px` : "20rem" }}
       />
       {error && <ErrorBlock message={error} />}
     </div>
   );
 };
 
-export default Input;
+export default DatePicker

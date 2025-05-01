@@ -5,15 +5,18 @@ import TextArea from "../common/TextArea";
 import AddPrivilege from "./AddPrivilege";
 import ButtonSecondary from "../common/ButtonSecondary";
 import ButtonPrimary from "../common/ButtonPrimary";
-import { useGetScreen } from "../../hooks/query/useGetScreen";
+import { useGetAll } from "../../hooks/query/common/useGetAll";
 import { useValidateForm } from "../../validations/hooks/useValidateForm";
 import {
   moduleSchema,
   privilegesValidationSchema,
 } from "../../validations/schema/moduleSchema";
 import { useGetModuleById } from "../../hooks/query/module/useGetModuleById";
+import { useUpdateMutation } from "../../hooks/query/common/useUpdateMutation";
+import { useCreateMutation } from "../../hooks/query/common/useCreateMutation";
 
 const moduleInitialState = {
+  id: "",
   name: "",
   code: "",
   description: "",
@@ -30,7 +33,7 @@ const privilagesInitialState = [
 const Form = ({ closeModal, moduleId }) => {
   const [formData, setFormData] = useState(moduleInitialState);
   const [privileges, setPrivileges] = useState(privilagesInitialState);
-  const { data: screen } = useGetScreen();
+  const { data: screen } = useGetAll(["screen"]);
   const { data: existingModule } = useGetModuleById(moduleId);
   const {
     errors: moduleErrors,
@@ -44,14 +47,27 @@ const Form = ({ closeModal, moduleId }) => {
     validateForm: validatePrivilegesState,
   } = useValidateForm(privileges, privilegesValidationSchema);
 
-// useMutation({
-//   mutationKey: ["save_module"],
-//   mutationFn: (requestBody) => postApi("/module", requestBody),
-// });
+  const updateMutation = useUpdateMutation(["module", moduleId], {
+    onSuccess: () => {
+      closeModal();
+    },
+  });
+
+  const createMutation = useCreateMutation(["module"], {
+    onSuccess: () => {
+      closeModal();
+      setFormData(moduleInitialState);
+      setPrivileges(privilagesInitialState);
+    },
+    onError: () => {
+      closeModal();
+    },
+  });
 
   useEffect(() => {
     if (existingModule) {
       setFormData({
+        id: existingModule.id,
         name: existingModule.name,
         code: existingModule.code,
         description: existingModule.description,
@@ -114,9 +130,9 @@ const Form = ({ closeModal, moduleId }) => {
     if (isValidModule && isValidPrivileges) {
       const newObj = { ...formData, privilegeList: privileges };
       if (moduleId) {
-        console.log("call edit api");
+        updateMutation.mutate(newObj);
       } else {
-        console.log("call post api");
+        createMutation.mutate(newObj);
       }
     }
   }
@@ -127,6 +143,7 @@ const Form = ({ closeModal, moduleId }) => {
       className="flex flex-col gap-4 text-sm w-full"
     >
       <CustomSelect
+        id="screen"
         label="Screen"
         options={options}
         value={formData.screenId}
@@ -137,6 +154,7 @@ const Form = ({ closeModal, moduleId }) => {
         error={moduleErrors["screenId"]}
       />
       <Input
+        id="code"
         label="Module Code"
         type="text"
         value={formData.code}
@@ -145,6 +163,7 @@ const Form = ({ closeModal, moduleId }) => {
         error={moduleErrors["code"]}
       />
       <Input
+        id="name"
         label="Module Name"
         type="text"
         value={formData.name}
@@ -153,6 +172,7 @@ const Form = ({ closeModal, moduleId }) => {
         error={moduleErrors["name"]}
       />
       <TextArea
+        id="description"
         label="Description"
         type="textarea"
         value={formData.description}

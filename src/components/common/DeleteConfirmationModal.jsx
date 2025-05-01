@@ -22,7 +22,11 @@ const DeleteConfirmationModal = ({ isOpen, onClose, children }) => {
         <h2 className="text-xl text-red-500 font-semibold mb-4 tracking-wide">
           Delete Confirmation
         </h2>
-        <p className="text-xs">Are you sure want to delete?</p>
+        <h3 className="text-sm">Are you sure want to delete this?</h3>
+        <p className='text-xs mt-1'>
+          This action cannot be undone, and all associated data will be
+          permanently removed.
+        </p>
         {children}
       </div>
     </dialog>,

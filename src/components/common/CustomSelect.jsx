@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, KeyboardEvent } from "react";
 import ErrorBlock from "./ErrorBlock";
 
 export const CustomSelect = ({
-    label=null,
+  label = null,
   options,
   value,
   onChange,
@@ -12,6 +12,7 @@ export const CustomSelect = ({
   disabled = false,
   searchable = false,
   emptyMessage = "No options available",
+  width,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -126,7 +127,9 @@ export const CustomSelect = ({
   };
 
   return (
-    <div className="flex flex-col group">
+    <div className="flex flex-col  group"
+      style={{width: width? `${width}px`: ''}}
+    >
       {label && (
         <label className="block group-focus-within:text-sky-500 text-xs font-medium duration-300">
           {label}
@@ -140,7 +143,7 @@ export const CustomSelect = ({
         {/* Select Trigger */}
         <button
           type="button"
-          className={`flex items-center justify-between w-full px-3 py-2 text-left rounded-md  transition-all duration-200 outline-none bg-white dark:bg-gray-600 hover:border-gray-400
+          className={`flex items-center justify-between w-full px-3 py-2 text-left rounded-md  transition-all duration-200 outline-none bg-white dark:bg-gray-600 
         `}
           onClick={() => !disabled && setIsOpen(!isOpen)}
           disabled={disabled}
@@ -186,6 +189,7 @@ export const CustomSelect = ({
             {searchable && (
               <div className="sticky top-0 p-2 text-xs bg-white dark:bg-gray-600 border-b border-gray-200 dark:border-gray-700">
                 <input
+                  name="search"
                   ref={searchInputRef}
                   type="text"
                   placeholder="Search..."
@@ -233,7 +237,7 @@ export const CustomSelect = ({
                   </button>
                 ))
               ) : (
-                <div className="px-3 py-2 text-sm text-gray-500 text-center">
+                <div className="px-3 py-2 text-xs text-gray-500 text-center">
                   {emptyMessage}
                 </div>
               )}
