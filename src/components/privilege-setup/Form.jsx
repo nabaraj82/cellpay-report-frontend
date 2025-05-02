@@ -17,44 +17,44 @@ const initialFormData = {
 
 const Form = ({ closeModal, editingData }) => {
   const [formData, setFormData] = useState(editingData || initialFormData);
+
+  
+    const createMutation = useCreateMutation(["privilege"], {
+      onSuccess: () => {
+        closeModal();
+        setFormData(initialFormData);
+      },
+      onError: () => {
+        closeModal();
+      },
+    });
+    const updateMutation = useUpdateMutation(["privilege"], {
+      onSuccess: () => {
+        closeModal();
+      },
+      onError: () => {
+        closeModal();
+      },
+    });
   const { errors, setErrors, validateForm } = useValidateForm(
     formData,
     screenSchema
   );
 
-  const createMutation = useCreateMutation(["screen"], {
-    onSuccess: () => {
-      closeModal();
-      setFormData(initialFormData);
-    },
-    onError: () => {
-      closeModal();
-    },
-  });
-
-  const updateMutation = useUpdateMutation(["screen"], {
-    onSuccess: () => {
-      closeModal();
-    },
-    onError: () => {
-      closeModal();
-    },
-  });
-
-  function handleChange(e) {
-    const { name, value } = e.target;
-    if (errors[name]) {
-      setErrors((prevState) => {
-        const newErrorObj = { ...prevState };
-        delete newErrorObj[name];
-        return newErrorObj;
-      });
-    }
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }
+   function handleChange(e) {
+     const { name, value } = e.target;
+     if (errors[name]) {
+       setErrors((prevState) => {
+         const newErrorObj = { ...prevState };
+         delete newErrorObj[name];
+         return newErrorObj;
+       });
+     }
+     setFormData((prevState) => ({
+       ...prevState,
+       [name]: value,
+     }));
+   }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -72,7 +72,7 @@ const Form = ({ closeModal, editingData }) => {
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-sm">
       <Input
         id="code"
-        label="Screen Code"
+        label="Privilege Code"
         type="text"
         value={formData.code}
         onChange={handleChange}
@@ -81,7 +81,7 @@ const Form = ({ closeModal, editingData }) => {
       />
       <Input
         id="name"
-        label="Screen Name"
+        label="Privilege Name"
         type="text"
         value={formData.name}
         onChange={handleChange}

@@ -4,12 +4,13 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   getFilteredRowModel,
-} from '@tanstack/react-table';
-import { useState, useRef } from 'react';
+} from "@tanstack/react-table";
+import { useState, useRef } from "react";
+import "./table.css"; // Assuming the CSS file is in the same directory
 // import { useVirtual } from '@tanstack/react-virtual';
-import Fuse from 'fuse.js';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import Spinner from '../common/Spinner';
+import Fuse from "fuse.js";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import Spinner from "../common/Spinner";
 
 // Define fuzzy filter function
 const fuzzyFilter = (row, columnId, value) => {
@@ -34,6 +35,7 @@ export function DataTable({
   enableVirtualization = false,
   virtualItemSize = 52,
   globalFilter,
+  tableHeight = "lg",
 }) {
   const [internalPagination, setInternalPagination] = useState({
     pageIndex: 0,
@@ -43,7 +45,9 @@ export function DataTable({
   const [columnFilters, setColumnFilters] = useState([]);
 
   const pagination = isServerSide ? controlledPagination : internalPagination;
-  const setPagination = isServerSide ? onPaginationChange : setInternalPagination;
+  const setPagination = isServerSide
+    ? onPaginationChange
+    : setInternalPagination;
 
   const pageCount = isServerSide
     ? controlledPageCount
@@ -67,30 +71,30 @@ export function DataTable({
     filterFns: {
       fuzzy: fuzzyFilter,
     },
-    globalFilterFn: enableFuzzyFilter ? 'fuzzy' : undefined,
+    globalFilterFn: enableFuzzyFilter ? "fuzzy" : undefined,
   });
 
   // Virtualization setup
- const tableContainerRef = useRef(null);
- const { rows } = table.getRowModel();
+  const tableContainerRef = useRef(null);
+  const { rows } = table.getRowModel();
 
- const rowVirtualizer = useVirtualizer({
-   count: rows.length,
-   getScrollElement: () => tableContainerRef.current,
-   estimateSize: () => virtualItemSize,
-   overscan: 10,
- });
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => tableContainerRef.current,
+    estimateSize: () => virtualItemSize,
+    overscan: 10,
+  });
 
- const virtualRows = rowVirtualizer.getVirtualItems();
- const paddingTop = virtualRows.length > 0 ? virtualRows[0]?.start || 0 : 0;
- const paddingBottom =
-   virtualRows.length > 0
-     ? rowVirtualizer.getTotalSize() -
-       (virtualRows[virtualRows.length - 1]?.end || 0)
-     : 0;
+  const virtualRows = rowVirtualizer.getVirtualItems();
+  const paddingTop = virtualRows.length > 0 ? virtualRows[0]?.start || 0 : 0;
+  const paddingBottom =
+    virtualRows.length > 0
+      ? rowVirtualizer.getTotalSize() -
+        (virtualRows[virtualRows.length - 1]?.end || 0)
+      : 0;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 ">
       {/* Global Filter */}
       {/* {enableFuzzyFilter && (
         <div className="p-2">
@@ -131,17 +135,21 @@ export function DataTable({
       <div
         ref={tableContainerRef}
         className={`${
-          enableVirtualization ? 'h-[350px]' : ''
+          enableVirtualization
+            ? tableHeight === "sm"
+              ? "h-[250px]"
+              : "h-[350px]"
+            : ""
         } overflow-auto relative`}
       >
-        <table className="min-w-full divide-y dark:bg-grayl divide-gray-200">
-          <thead className="bg-gray-50 sticky top-0 z-10">
+        <table className="min-w-full divide-y divide-gray-200">
+          {/* <thead className="bg-gray-50 dark:bg-gray-600 sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                     style={{
                       width: header.getSize(),
                     }}
@@ -154,12 +162,40 @@ export function DataTable({
                 ))}
               </tr>
             ))}
+          </thead> */}
+          <thead className="bg-gray-50 dark:bg-gray-600 sticky top-0 z-10">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className={
+                      header.column.columnDef.meta?.sticky
+                        ? "px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky z-[2] right-0 bg-white dark:bg-gray-800"
+                        : "px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider bg-white dark:bg-gray-800"
+                    }
+                    style={{
+                      width: header.getSize(),
+                      [header.column.columnDef.meta?.sticky]: 0,
+                    }}
+                    data-sticky-header={
+                      header.column.columnDef.meta?.sticky ? "true" : undefined
+                    }
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="dark:bg-gray-600 divide-y divide-gray-200">
             {isLoading ? (
               <tr>
                 <td colSpan={columns.length} className="px-4 py-4 text-center">
-                 <Spinner />
+                  <Spinner />
                 </td>
               </tr>
             ) : enableVirtualization ? (
@@ -172,9 +208,19 @@ export function DataTable({
                 {virtualRows.map((virtualRow) => {
                   const row = rows[virtualRow.index];
                   return (
-                    <tr key={row.id}>
+                    <tr
+                      key={row.id}
+                      className="hover:bg-gray-200 dark:hover:bg-gray-500 duration-300 group"
+                    >
                       {row.getVisibleCells().map((cell) => (
-                        <td key={cell.id} className="px-4 py-4 text-xs whitespace-nowrap">
+                        <td
+                          key={cell.id}
+                          className={
+                            cell.column.columnDef.meta?.sticky
+                              ? "px-4 py-4 text-xs whitespace-nowrap sticky z-[1] right-0 bg-white dark:bg-gray-600 dark:text-gray-300 group-hover:bg-gray-200 duration-300 dark:group-hover:bg-gray-600"
+                              : "px-4 py-4 text-xs whitespace-nowrap dark:bg-gray-600 dark:text-gray-300"
+                          }
+                        >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -194,7 +240,26 @@ export function DataTable({
               table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
+                    <td
+                      key={cell.id}
+                      className="px-6 py-4 whitespace-nowrap"
+                      data-sticky-td={
+                        cell.column.columnDef.meta?.sticky ? "true" : undefined
+                      }
+                      data-sticky-first-right-td={
+                        cell.column.columnDef.meta?.sticky === "right"
+                          ? "true"
+                          : undefined
+                      }
+                      style={{
+                        position: cell.column.columnDef.meta?.sticky
+                          ? "sticky"
+                          : undefined,
+                        [cell.column.columnDef.meta?.sticky]: 0,
+                        background: "inherit",
+                        zIndex: 1,
+                      }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -251,7 +316,7 @@ export function DataTable({
           <span className="flex items-center gap-1 text-xs">
             <div>Page</div>
             <strong>
-              {table.getState().pagination.pageIndex + 1} of{' '}
+              {table.getState().pagination.pageIndex + 1} of{" "}
               {table.getPageCount()}
             </strong>
           </span>

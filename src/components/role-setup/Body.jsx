@@ -14,6 +14,7 @@ import RoleForm from "./RoleForm";
 import AssignUserForm from "./AssignUserForm";
 import { DataTable } from "../table/DataTable";
 import { columnHelper } from "../../util/tableHelper";
+import Tooltip from "../common/Tooltip";
 
 const Body = ({ data, searchTerm }) => {
   const statusMutation = useStatusMutation(["role"]);
@@ -80,18 +81,22 @@ const Body = ({ data, searchTerm }) => {
       cell: ({ row: { original } }) => (
         <div className="flex gap-4">
           <EditButton onClick={() => handleOpenEditRoleModal(original)} />
+          <Tooltip content="assign permission" position="left">
           <button
             className="cursor-pointer"
             onClick={() => handleOpenRoleSetupModal(original.id)}
           >
             <FiSettings size={15} />
           </button>
+          </Tooltip>
+          <Tooltip content="assign user" position="left">
           <button
             className="cursor-pointer"
             onClick={() => handleOpenAssignRoleModal(original.id)}
           >
             <FiUserPlus size={15} />
           </button>
+          </Tooltip>
         </div>
       ),
     }),

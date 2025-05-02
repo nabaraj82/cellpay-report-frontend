@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { hasAuthParams, useAuth } from "react-oidc-context";
 import { initLoader } from '../../loaders/initLoader';
+import ReportLottie from '../common/ReportLottie';
 const ProtectedRoute = ({ children }) => {
   const [hasTriedSignin, setHasTriedSignin] = useState(false);
   const auth = useAuth();
@@ -24,10 +25,13 @@ const ProtectedRoute = ({ children }) => {
     }
   }, []);
   if (auth.isLoading || window.location.pathname === "/oidc/sign-in")
-    return <div>Signing you in/out...</div>;
+    return <ReportLottie />;
 
   if (!auth.isAuthenticated) {
-    return <div>Please sign in</div>
+    return <div>
+      <ReportLottie />
+      <p>Please refresh page..</p>
+    </div>
   }
   if (auth.isAuthenticated) {
     initLoader();

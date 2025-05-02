@@ -1,0 +1,24 @@
+/* Sticky column styles */
+[data-sticky-td] {
+  position: sticky;
+  background: inherit;
+  z-index: 1;
+}
+
+[data-sticky-last-left-td] {
+  box-shadow: 2px 0px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-sticky-first-right-td] {
+  box-shadow: -2px 0px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode support */
+.dark [data-sticky-td] {
+  background: #4b5563;
+}
+
+/* Ensure sticky headers stay above sticky cells */
+thead th[data-sticky-header] {
+  z-index: 2;
+}

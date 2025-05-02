@@ -250,6 +250,7 @@ const AssignUserForm = ({ roleId, closeAssignRoleModal }) => {
           isServerSide={false}
           enableFuzzyFilter={false}
           enableVirtualization={true}
+          tableHeight="sm"
         />
 
         <div className="flex gap-4 justify-end">

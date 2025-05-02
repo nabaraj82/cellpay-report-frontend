@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PageContainer from "../../components/common/PageContainer";
-import Header from "../../components/userSetup/Header";
-import Body from "../../components/userSetup/Body";
+import Header from "../../components/user-setup/Header";
+import Body from "../../components/user-setup/Body";
 
 const UserSetup = () => {
   const [searchTerm, setSearchTerm] = useState("");

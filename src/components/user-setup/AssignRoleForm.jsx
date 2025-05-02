@@ -162,6 +162,7 @@ const AssignRoleForm = ({ userId, closeAssignRoleModal }) => {
           isServerSide={false}
           enableFuzzyFilter={false}
           enableVirtualization={true}
+          tableHeight="sm"
         />
         <div className="flex gap-8 justify-end">
           <ButtonSecondary type="button" onClick={closeAssignRoleModal}>

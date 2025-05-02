@@ -23,18 +23,20 @@ const Menu = () => {
         aria-label="Toggle dark mode"
       >
         {darkMode ? (
-          <FiSun size={20} className="text-yellow-400" />
+          <FiSun size={15} className="text-yellow-400" />
         ) : (
-          <FiMoon size={20} className="text-gray-500" />
+          <FiMoon size={15} className="text-gray-500" />
         )}
       </button>
-      <div className="relative">
+      <div className="relative text-sm">
         <button
           className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600"
           onClick={toggleUserDropdown}
         >
-          <FiUser size={20} className="dark:text-gray-300" />
-          <span className="text-gray-700 dark:text-gray-300">{currentUser?.userDetails.fullName}</span>
+          <FiUser size={15} className="dark:text-gray-300" />
+          <span className="text-gray-700 dark:text-gray-300">
+            {currentUser?.userDetails.fullName}
+          </span>
           <FiChevronDown
             className={`transition-transform ${
               userDropdownOpen ? "rotate-180" : ""

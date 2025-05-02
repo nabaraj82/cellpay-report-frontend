@@ -36,7 +36,7 @@ const NavItem = ({ icon, text, path, subItems = [] }) => {
           {icon}
         </span>
         {isSlidebarOpen && (
-          <span className="ml-3 text-sm whitespace-nowrap">{text}</span>
+          <span className="ml-3 text-xs whitespace-nowrap">{text}</span>
         )}
       </NavLink>
     );
@@ -53,7 +53,7 @@ const NavItem = ({ icon, text, path, subItems = [] }) => {
         </span>
         {isSlidebarOpen && (
           <>
-            <span className="ml-3 text-sm whitespace-nowrap">{text}</span>
+            <span className="ml-3 text-xs whitespace-nowrap">{text}</span>
             <span
               className={`ml-auto transition-transform duration-200 text-xs ${
                 openSubmenu ? "rotate-90" : ""

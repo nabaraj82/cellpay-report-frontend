@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <header className="bg-white dark:bg-gray-700 shadow-sm z-20 relative">
       <Progressbar />
-      <div className="flex items-center justify-between p-4">
+      <div className="flex items-center justify-between p-4 py-2">
         <div className="flex items-center">
           <button
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 mr-2"
@@ -27,8 +27,8 @@ const Header = () => {
           >
             <FiMenu size={20} className="text-gray-500 dark:text-gray-300" />
           </button>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-            {lastSegment === undefined ? "dashboard" : lastSegment}
+          <h2 className="text-base font-normal text-gray-800 tracking-wider dark:text-white">
+            {lastSegment === undefined ? "Dashboard" : lastSegment.charAt(0).toUpperCase()+lastSegment.slice(1)}
           </h2>
         </div>
         <Menu />

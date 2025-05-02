@@ -11,6 +11,7 @@ import { useShowModal } from "../../hooks/useShowModal";
 import Modal from "../common/Modal";
 import AssignRoleForm from "./AssignRoleForm";
 import Form from "./Form";
+import Tooltip from "../common/Tooltip";
 
 const Body = ({ searchTerm }) => {
   const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -69,12 +70,15 @@ const Body = ({ searchTerm }) => {
       cell: ({ row: { original } }) => {
         return (
           <>
-            {
-              original?.roles?.length > 0? original.roles.map((role) => (
-              <Badge key={role.id} badge={role.name} />
-              ))
-                : <Badge badge={"null"} />
-            }
+            {original?.roles?.length > 0 ? (
+              <div className="flex gap-1">
+                {original.roles.map((role) => (
+                  <Badge key={role.id} badge={role.name} />
+                ))}
+              </div>
+            ) : (
+              <Badge badge={"null"} />
+            )}
           </>
         );
       },
@@ -109,14 +113,19 @@ const Body = ({ searchTerm }) => {
                 })
               }
             />
-            <button
-              className="cursor-pointer"
-              onClick={() => handleOpenAssignRoleModal(original.id)}
-            >
-              <FiUserPlus size={15} />
-            </button>
+            <Tooltip content="assign role" position="left">
+              <button
+                className="cursor-pointer"
+                onClick={() => handleOpenAssignRoleModal(original.id)}
+              >
+                <FiUserPlus size={15} />
+              </button>
+            </Tooltip>
           </div>
         );
+      },
+      meta: {
+        sticky: "right", 
       },
     }),
   ];
