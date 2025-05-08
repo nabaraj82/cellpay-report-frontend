@@ -2,7 +2,7 @@ import ErrorBlock from "./ErrorBlock";
 
 const CheckboxGroup = ({ options, label, onChange, error }) => {
   return (
-    <div className="space-y-2 text-xs">
+    <div className="space-y-2 text-sm xl:text-base">
       {label && <label className="block font-medium">{label}</label>}
       <div className="space-x-4">
         {options.map((option) => (

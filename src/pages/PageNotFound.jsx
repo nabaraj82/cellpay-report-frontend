@@ -1,4 +1,4 @@
-import LinkButton from "../components/common/CustomLink";
+import LinkButton from "@/components/common/CustomLink";
 
 const PageNotFound = ({title, content, statusCode}) => {
   return (

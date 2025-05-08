@@ -13,7 +13,7 @@ export const useRAPMutation = (queryKey, options = {}) => {
             if (options.onSuccess) options.onSuccess();
         },
         onError: (error) => {
-            toast.error(JSON.stringify(error) || "Failed to update")
+            toast.error(JSON.stringify(error.message) || "Failed to update")
         }
     })
 }

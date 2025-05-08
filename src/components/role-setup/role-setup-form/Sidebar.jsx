@@ -1,11 +1,12 @@
+import ButtonDanger from "@/components/common/ButtonDanger";
+import ButtonSecondary from "@/components/common/ButtonSecondary";
+import CustomSelect from "@/components/common/CustomSelect";
+import DeleteButton from "@/components/common/DeleteButton";
+import DeleteConfirmationModal from "@/components/common/DeleteConfirmationModal";
+import { useRPSMutation } from "@/hooks/query/role/useRPSMutation";
+import { useShowModal } from "@/hooks/useShowModal";
 import React, { useEffect, useRef, useState } from "react";
-import CustomSelect from "../../common/CustomSelect";
-import DeleteButton from "../../common/DeleteButton";
-import { useShowModal } from "../../../hooks/useShowModal";
-import DeleteConfirmationModal from "../../common/DeleteConfirmationModal";
-import ButtonSecondary from "../../common/ButtonSecondary";
-import ButtonDanger from "../../common/ButtonDanger";
-import { useRPSMutation } from "../../../hooks/query/role/useRPSMutation";
+
 
 const Sidebar = ({ data, roleId, setActiveScreenId }) => {
   const [selectedScreen, setSelectedScreen] = useState(
@@ -99,7 +100,7 @@ const Sidebar = ({ data, roleId, setActiveScreenId }) => {
           placeholder="Select Screen"
           searchable
         />
-        <ul className="mt-4 flex flex-col gap-2 text-xs">
+        <ul className="mt-4 flex flex-col gap-2 text-xs md:min-w-[10rem]">
           {selectedScreen.map((screen) => (
             <li
               key={screen.id}

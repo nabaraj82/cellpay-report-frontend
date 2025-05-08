@@ -1,8 +1,9 @@
+import PageContainer from "@/components/common/PageContainer";
+import Body from "@/components/privilege-setup/Body";
+import Header from "@/components/privilege-setup/Header";
+import { useGetAll } from "@/hooks/query/common/useGetAll";
 import React, { useState } from "react";
-import PageContainer from "../../components/common/PageContainer";
-import Header from "../../components/privilege-setup/Header";
-import Body from "../../components/privilege-setup/Body";
-import { useGetAll } from "../../hooks/query/common/useGetAll";
+
 
 const PrivilageSetup = () => {
   const [searchTerm, setSearchTerm] = useState("");

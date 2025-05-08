@@ -1,12 +1,12 @@
+import ButtonPrimary from "@/components/common/ButtonPrimary";
+import ButtonSecondary from "@/components/common/ButtonSecondary";
+import Input from "@/components/common/Input";
+import TextArea from "@/components/common/TextArea";
+import { useCreateMutation } from "@/hooks/query/common/useCreateMutation";
+import { useUpdateMutation } from "@/hooks/query/common/useUpdateMutation";
+import { useValidateForm } from "@/validations/hooks/useValidateForm";
+import screenSchema from "@/validations/schema/screenSchema";
 import React, { useState } from "react";
-import Input from "../common/Input";
-import TextArea from "../common/TextArea";
-import ButtonSecondary from "../common/ButtonSecondary";
-import ButtonPrimary from "../common/ButtonPrimary";
-import { useValidateForm } from "../../validations/hooks/useValidateForm";
-import screenSchema from "../../validations/schema/screenSchema";
-import { useCreateMutation } from "../../hooks/query/common/useCreateMutation";
-import { useUpdateMutation } from "../../hooks/query/common/useUpdateMutation";
 
 const initialFormData = {
   id: "",

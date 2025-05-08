@@ -1,20 +1,31 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import ErrorBoundary from "../components/common/ErrorBoundary";
-import RootLayout from "../layout/RootLayout";
-import Dashboard from "../pages/Dashboard";
-import Profile from "../pages/Profile";
 import PageNotFound from "../pages/PageNotFound";
-import RootLayoutWrapper from "../layout/RootLayoutWrapper";
-import { privateRoutes } from "./privateRoutes";
-import UserSetup from "../pages/usermanagement/UserSetup";
-import RoleSetup from "../pages/usermanagement/RoleSetup";
-import ScreenSetup from "../pages/screen-module-setup/ScreenSetup";
-import ModuleSetup from "../pages/screen-module-setup/ModuleSetup";
-import PrivilageSetup from "../pages/screen-module-setup/PrivilageSetup";
 import PermissionProtectedRoute from "../components/auth/PermissionProtectedRoute";
 import { SCREEN } from "../constants/screen";
 import { MODULE } from "../constants/module";
+import { privateRoutes } from "./privateRoutes";
+
+const UserSetup = lazy(() => import("../pages/usermanagement/UserSetup"));
+const RoleSetup = lazy(() => import("../pages/usermanagement/RoleSetup"));
+const ScreenSetup = lazy(() =>
+  import("../pages/screen-module-setup/ScreenSetup")
+);
+const PrivilageSetup = lazy(() =>
+  import("../pages/screen-module-setup/PrivilageSetup")
+);
+
+const ModuleSetup = lazy(() =>
+  import("../pages/screen-module-setup/ModuleSetup")
+);
+
+const RootLayout = lazy(() => import("../layout/RootLayout"));
+// const RootLayoutWrapper = lazy(() => import("../layout/RootLayoutWrapper"));
+const Dashboard = lazy(() => import("../pages/Dashboard"));
+const Profile = lazy(() => import("../pages/Profile"));
+const ChangePassword = lazy(() => import("@/pages/ChangePassword"));
 
 const router = createBrowserRouter([
   {
@@ -22,9 +33,9 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ErrorBoundary>
-          <RootLayoutWrapper>
             <RootLayout />
-          </RootLayoutWrapper>
+          {/* <RootLayoutWrapper>
+          </RootLayoutWrapper> */}
         </ErrorBoundary>
       </ProtectedRoute>
     ),
@@ -101,6 +112,10 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "change-password",
+        element: <ChangePassword />
       },
       {
         path: "*",

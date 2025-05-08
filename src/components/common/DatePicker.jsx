@@ -3,7 +3,7 @@ import Label from './Label';
 
 const DatePicker = ({ label = null, error, ...rest }) => {
   return (
-    <div className="flex flex-col group text-xs">
+    <div className="flex flex-col group text-sm xl:text-base">
       {label && <Label title={label} />}
       <input
         {...rest}

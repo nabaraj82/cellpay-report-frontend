@@ -1,10 +1,10 @@
-import React from "react";
-import CustomSelect from "../common/CustomSelect";
-import Label from "../common/Label";
-import Input from "../common/Input";
-import DeleteButton from "../common/DeleteButton";
-import { useGetPrivilege } from "../../hooks/query/module/useGetPrivilege";
-import { METHODS } from "../../data/methods";
+import CustomSelect from "@/components/common/CustomSelect";
+import DeleteButton from "@/components/common/DeleteButton";
+import Input from "@/components/common/Input";
+import Label from "@/components/common/Label";
+import { METHODS } from "@/data/methods";
+import { useGetPrivilege } from "@/hooks/query/module/useGetPrivilege";
+
 
 const AddPrivilege = ({ privileges, setPrivileges, errors, setErrors }) => {
   const { data } = useGetPrivilege();

@@ -1,17 +1,17 @@
-import { createColumnHelper } from "@tanstack/react-table";
-import DeleteConfirmationModal from "../common/DeleteConfirmationModal";
-import { useShowModal } from "../../hooks/useShowModal";
-import ButtonSecondary from "../common/ButtonSecondary";
-import ButtonDanger from "../common/ButtonDanger";
-import { useRef} from "react";
-import Toast from "../common/Toast";
-import Modal from "../common/Modal";
-import Form from "./Form";
-import EditButton from "../common/EditButton";
-import DeleteButton from "../common/DeleteButton";
-import { useDeleteMutation } from "../../hooks/query/common/useDeleteMutation";
-import { DataTable } from "../table/DataTable";
-import { columnHelper } from "../../util/tableHelper";
+import {  useRef} from "react";
+import { useDeleteMutation } from "@/hooks/query/common/useDeleteMutation";
+import { useShowModal } from "@/hooks/useShowModal";
+import { columnHelper } from "@/util/tableHelper";
+import DeleteButton from "@/components/common/DeleteButton";
+import Toast from "@/components/common/Toast";
+import Modal from "@/components/common/Modal";
+import Form from "@/components/screen-setup/Form";
+import DeleteConfirmationModal from "@/components/common/DeleteConfirmationModal";
+import ButtonSecondary from "@/components/common/ButtonSecondary";
+import ButtonDanger from "@/components/common/ButtonDanger";
+import { DataTable } from "@/components/table/DataTable";
+import EditButton from "@/components/common/EditButton";
+
 
 const Body = ({ data, globalFilter }) => {
 

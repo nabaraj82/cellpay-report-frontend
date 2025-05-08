@@ -7,7 +7,7 @@ const TextArea = ({label, error, ...rest}) => {
       <Label title={label} />
       <textarea
         {...rest}
-        className="w-full text-xs md:min-w-[20rem] duration-300 mt-1 rounded-md border px-3 py-2 outline-none focus:border-sky-500"
+        className="w-full text-sm md:min-w-[20rem] duration-300 mt-1 rounded-md border px-3 py-2 outline-none focus:border-sky-500"
       />
       {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
     </div>

@@ -6,13 +6,12 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { useState, useRef } from "react";
-import "./table.css"; // Assuming the CSS file is in the same directory
-// import { useVirtual } from '@tanstack/react-virtual';
+import "./table.css";
 import Fuse from "fuse.js";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import Spinner from "../common/Spinner";
+import Spinner from "@/components/common/Spinner";
 
-// Define fuzzy filter function
+// fuzzy filter function
 const fuzzyFilter = (row, columnId, value) => {
   const fuse = new Fuse([row.original], {
     keys: [columnId],
@@ -138,31 +137,11 @@ export function DataTable({
           enableVirtualization
             ? tableHeight === "sm"
               ? "h-[250px]"
-              : "h-[350px]"
+              : "h-[500px]"
             : ""
         } overflow-auto relative`}
       >
         <table className="min-w-full divide-y divide-gray-200">
-          {/* <thead className="bg-gray-50 dark:bg-gray-600 sticky top-0 z-10">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                    style={{
-                      width: header.getSize(),
-                    }}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead> */}
           <thead className="bg-gray-50 dark:bg-gray-600 sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -171,8 +150,8 @@ export function DataTable({
                     key={header.id}
                     className={
                       header.column.columnDef.meta?.sticky
-                        ? "px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky z-[2] right-0 bg-white dark:bg-gray-800"
-                        : "px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider bg-white dark:bg-gray-800"
+                        ? "px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky z-[2] right-0 bg-white dark:bg-gray-800"
+                        : "px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider bg-white dark:bg-gray-800"
                     }
                     style={{
                       width: header.getSize(),
@@ -217,8 +196,8 @@ export function DataTable({
                           key={cell.id}
                           className={
                             cell.column.columnDef.meta?.sticky
-                              ? "px-4 py-4 text-xs whitespace-nowrap sticky z-[1] right-0 bg-white dark:bg-gray-600 dark:text-gray-300 group-hover:bg-gray-200 duration-300 dark:group-hover:bg-gray-600"
-                              : "px-4 py-4 text-xs whitespace-nowrap dark:bg-gray-600 dark:text-gray-300"
+                              ? "px-4 py-4 text-sm whitespace-nowrap sticky z-[1] right-0 bg-white dark:bg-gray-600 dark:text-gray-300 group-hover:bg-gray-200 duration-300 dark:group-hover:bg-gray-600"
+                              : "px-4 py-4 text-sm xl:text-base whitespace-nowrap dark:bg-gray-600 dark:text-gray-300"
                           }
                         >
                           {flexRender(

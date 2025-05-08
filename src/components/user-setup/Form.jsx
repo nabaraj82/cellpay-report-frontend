@@ -1,11 +1,13 @@
+import ButtonPrimary from "@/components/common/ButtonPrimary";
+import ButtonSecondary from "@/components/common/ButtonSecondary";
+import Input from "@/components/common/Input";
+import { useUserCreateMutation } from "@/hooks/query/user/useUserCreateMutation";
+import { useUserUpdateMutation } from "@/hooks/query/user/useUserUpdateMutation";
+import { convertToPreetyNepali } from "@/util/preetyUnicodeMapping";
+import { useValidateForm } from "@/validations/hooks/useValidateForm";
+import userFormSchema from "@/validations/schema/userFormSchema";
 import React, { useEffect, useState } from "react";
-import Input from "../common/Input";
-import ButtonSecondary from "../common/ButtonSecondary";
-import ButtonPrimary from "../common/ButtonPrimary";
-import { useValidateForm } from "../../validations/hooks/useValidateForm";
-import userFormSchema from "../../validations/schema/userFormSchema";
-import { useUserCreateMutation } from "../../hooks/query/user/useUserCreateMutation";
-import { useUserUpdateMutation } from "../../hooks/query/user/useUserUpdateMutation";
+
 
 const initialFormData = {
   name: "",
@@ -48,10 +50,18 @@ const Form = ({ editingUser, closeModal }) => {
         return newErrors;
       });
     }
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    if (name === 'nameLocal') {
+      
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: convertToPreetyNepali(value),
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   }
 
   function handleCloseModal() {

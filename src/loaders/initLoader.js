@@ -13,6 +13,7 @@ export async function initLoader() {
     const response = await queryClient.fetchQuery({
       queryKey: ["init"],
       queryFn: ({ signal }) => getApi("/init", {}, signal),
+      staleTime: 2*10000
     });
       store.dispatch(setCurrentUSer(response));
       return response;

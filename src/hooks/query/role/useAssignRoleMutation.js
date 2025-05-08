@@ -19,7 +19,7 @@ export const useAssignRoleMutation = (roleId, options = {}) => {
       if (options.onSuccess) options.onSuccess();
     },
     onError: (error) => {
-      toast.error(JSON.stringify(error) || "Failed to assign role");
+      toast.error(JSON.stringify(error.message) || "Failed to assign role");
       if (options.onError) options.onError();
     },
   });

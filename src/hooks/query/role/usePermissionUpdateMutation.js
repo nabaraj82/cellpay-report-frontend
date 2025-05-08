@@ -12,7 +12,7 @@ const usePermissionUpdateMutation = (queryKey, endpoint, options = {}) => {
       if (options.onSuccess) options.onSuccess();
     },
     onError: (error) => {
-      toast.error(JSON.stringify(error) || "Faild to update");
+      toast.error(JSON.stringify(error.message) || "Faild to update");
       if (options.onError) options.onError();
     },
   });

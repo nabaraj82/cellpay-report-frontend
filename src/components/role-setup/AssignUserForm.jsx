@@ -1,20 +1,21 @@
-import { createColumnHelper } from "@tanstack/react-table";
-import React, {  useRef, useState } from "react";
-import { useGetAll } from "../../hooks/query/common/useGetAll";
-import CustomSelect from "../common/CustomSelect";
-import Input from "../common/Input";
-import DeleteButton from "../common/DeleteButton";
-import EditButton from "../common/EditButton";
-import ButtonSecondary from "../common/ButtonSecondary";
-import ButtonPrimary from "../common/ButtonPrimary";
-import ButtonDanger from "../common/ButtonDanger";
-import { useAssignRoleMutation } from "../../hooks/query/role/useAssignRoleMutation";
-import { useValidateForm } from "../../validations/hooks/useValidateForm";
-import { assignUserValidationSchema } from "../../validations/schema/assignUserValidationSchema";
-import DeleteConfirmationModal from "../common/DeleteConfirmationModal";
-import { useShowModal } from "../../hooks/useShowModal";
-import { useRemoveUserRoleMutation } from "../../hooks/query/role/useRemoveUserRoleMutation";
-import { DataTable } from "../table/DataTable";
+import ButtonDanger from "@/components/common/ButtonDanger";
+import ButtonPrimary from "@/components/common/ButtonPrimary";
+import ButtonSecondary from "@/components/common/ButtonSecondary";
+import CustomSelect from "@/components/common/CustomSelect";
+import DeleteButton from "@/components/common/DeleteButton";
+import DeleteConfirmationModal from "@/components/common/DeleteConfirmationModal";
+import EditButton from "@/components/common/EditButton";
+import Input from "@/components/common/Input";
+import { DataTable } from "@/components/table/DataTable";
+import { useGetAll } from "@/hooks/query/common/useGetAll";
+import { useAssignRoleMutation } from "@/hooks/query/role/useAssignRoleMutation";
+import { useRemoveUserRoleMutation } from "@/hooks/query/role/useRemoveUserRoleMutation";
+import { useShowModal } from "@/hooks/useShowModal";
+import { columnHelper } from "@/util/tableHelper";
+import { useValidateForm } from "@/validations/hooks/useValidateForm";
+import { assignUserValidationSchema } from "@/validations/schema/assignUserValidationSchema";
+import React, { useRef, useState } from "react";
+
 
 const initialFormData = {
   userId: "",
@@ -39,7 +40,7 @@ const AssignUserForm = ({ roleId, closeAssignRoleModal }) => {
     },
     !!roleId
   );
-  const { data: assigned_users, isFetching: isAssignedUserFetching } =
+  const { data: assigned_users } =
     useGetAll(
       ["user_role/users", roleId, "asigned"],
       {
@@ -57,6 +58,7 @@ const AssignUserForm = ({ roleId, closeAssignRoleModal }) => {
   });
 
   const removeUserRoleMutation = useRemoveUserRoleMutation({
+    queryKey: ['user_role/user'],
     onSuccess: () => {
       userDeleteRef.current = null;
       closeDeleteModal();
@@ -86,7 +88,6 @@ const AssignUserForm = ({ roleId, closeAssignRoleModal }) => {
     options.push(selectedOption);
   }
 
-  const columnHelper = createColumnHelper();
 
   const columns = [
     columnHelper.display({

@@ -1,4 +1,3 @@
-import React from "react";
 import { FiDelete } from "react-icons/fi";
 
 const DeleteButton = ({onClick}) => {

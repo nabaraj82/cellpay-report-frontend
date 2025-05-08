@@ -12,7 +12,7 @@ export const useCreateMutation = (queryKey, options = {}) => {
       if (options.onSuccess) options.onSuccess();
     },
     onError: (error) => {
-      toast.error(JSON.stringify(error) || "Failed to create");
+      toast.error(JSON.stringify(error.message) || "Failed to create");
       if (options.onError) options.onError();
     },
   });

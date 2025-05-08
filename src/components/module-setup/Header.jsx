@@ -1,9 +1,9 @@
-import React, { memo, useCallback } from 'react'
-import SearchInput from '../common/SearchInput';
-import ButtonPrimary from '../common/ButtonPrimary';
-import { useShowModal } from '../../hooks/useShowModal';
-import Form from './Form';
-import Modal from '../common/Modal';
+import ButtonPrimary from "@/components/common/ButtonPrimary";
+import Modal from "@/components/common/Modal";
+import SearchInput from "@/components/common/SearchInput";
+import Form from "@/components/module-setup/Form";
+import { useShowModal } from "@/hooks/useShowModal";
+import React, { memo, useCallback } from "react";
 
 const Header = memo(({ searchTerm, onChange }) => {
   const { isOpen, showModal, closeModal } = useShowModal();

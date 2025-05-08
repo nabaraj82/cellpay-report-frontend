@@ -12,7 +12,7 @@ export const useUpdateMutation = (queryKey, options = {}) => {
       if (options.onSuccess) options.onSuccess();
     },
     onError: (error) => {
-      toast.error(JSON.stringify(error) || "Failed to update");
+      toast.error(JSON.stringify(error.message) || "Failed to update");
       if (options.onError) options.onError();
     },
   });

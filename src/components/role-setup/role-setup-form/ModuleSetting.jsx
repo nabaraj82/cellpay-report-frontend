@@ -1,5 +1,5 @@
+import ModuleItem from "@/components/role-setup/role-setup-form/ModuleItem";
 import { FiBox } from "react-icons/fi";
-import ModuleItem from "./ModuleItem";
 
 const ModuleSetting = ({ screen, roleId }) => {
   return (

@@ -6,10 +6,10 @@ import TokenService from "../service/token/token.service";
 const api = axios.create({
   baseURL: envVariables.API_BASE_URL,
   timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
+  // headers: {
+  //   "Content-Type": "application/json",
+  //   Accept: "application/json",
+  // },
 });
 
 api.interceptors.request.use(

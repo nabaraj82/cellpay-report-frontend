@@ -1,8 +1,9 @@
+import PageContainer from "@/components/common/PageContainer";
+import Body from "@/components/module-setup/Body";
+import Header from "@/components/module-setup/Header";
+import { useGetAll } from "@/hooks/query/common/useGetAll";
 import React, { useCallback, useState } from "react";
-import Header from "../../components/module-setup/Header";
-import Body from "../../components/module-setup/Body";
-import PageContainer from "../../components/common/PageContainer";
-import { useGetAll } from "../../hooks/query/common/useGetAll";
+
 
 const ModuleSetup = () => {
   const [searchTerm, setSearchTerm] = useState("");

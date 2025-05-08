@@ -1,17 +1,17 @@
+import Badge from "@/components/common/Badge";
+import EditButton from "@/components/common/EditButton";
+import Modal from "@/components/common/Modal";
+import Switch from "@/components/common/Switch";
+import Tooltip from "@/components/common/Tooltip";
+import { DataTable } from "@/components/table/DataTable";
+import AssignRoleForm from "@/components/user-setup/AssignRoleForm";
+import Form from "@/components/user-setup/Form";
+import { useStatusMutation } from "@/hooks/query/common/useStatusMutation";
+import { useGetPaginatedUser } from "@/hooks/query/user/useGetPaginatedUser";
+import { useShowModal } from "@/hooks/useShowModal";
+import { columnHelper } from "@/util/tableHelper";
 import React, { useRef, useState } from "react";
-import { columnHelper } from "../../util/tableHelper";
-import Switch from "../common/Switch";
-import Badge from "../common/Badge";
-import { useGetPaginatedUser } from "../../hooks/query/user/useGetPaginatedUser";
-import { DataTable } from "../table/DataTable";
-import EditButton from "../common/EditButton";
 import { FiUserPlus } from "react-icons/fi";
-import { useStatusMutation } from "../../hooks/query/common/useStatusMutation";
-import { useShowModal } from "../../hooks/useShowModal";
-import Modal from "../common/Modal";
-import AssignRoleForm from "./AssignRoleForm";
-import Form from "./Form";
-import Tooltip from "../common/Tooltip";
 
 const Body = ({ searchTerm }) => {
   const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -77,7 +77,7 @@ const Body = ({ searchTerm }) => {
                 ))}
               </div>
             ) : (
-              <Badge badge={"null"} />
+              <Badge badge="------" />
             )}
           </>
         );

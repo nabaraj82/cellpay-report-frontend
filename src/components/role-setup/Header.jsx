@@ -1,9 +1,9 @@
-import React from 'react'
-import SearchInput from '../common/SearchInput';
-import ButtonPrimary from '../common/ButtonPrimary';
-import { useShowModal } from '../../hooks/useShowModal';
-import Modal from '../common/Modal';
-import RoleForm from './RoleForm';
+import ButtonPrimary from "@/components/common/ButtonPrimary";
+import Modal from "@/components/common/Modal";
+import SearchInput from "@/components/common/SearchInput";
+import RoleForm from "@/components/role-setup/RoleForm";
+import { useShowModal } from "@/hooks/useShowModal";
+
 
 const Header = ({ searchTerm, onChange }) => {
   

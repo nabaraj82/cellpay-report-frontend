@@ -28,7 +28,7 @@ const Sidebar = () => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed lg:static z-40 w-60 h-full bg-[#F1F2F7] dark:bg-gray-800 text-stone-500
+          fixed lg:static z-40 w-64 h-full bg-[#F1F2F7] dark:bg-gray-800 text-stone-500
           transform ${isSlidebarOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0 transition-transform duration-300 ${
             isSlidebarOpen ? "w-60" : "lg:w-18 "

@@ -2,7 +2,7 @@ import React from 'react'
 
 const PageContainer = ({children}) => {
   return (
-    <section className="dark:text-gray-300">
+    <section className="dark:text-gray-300 container">
       {children}
     </section>
   );

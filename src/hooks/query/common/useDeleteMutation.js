@@ -12,7 +12,7 @@ export const useDeleteMutation = (queryKey, options = {}) => {
       if (options.onSuccess) options.onSuccess();
     },
     onError: (error) => {
-      toast.error(JSON.stringify(error) || "Failed to delete");
+      toast.error(JSON.stringify(error.message) || "Failed to delete");
       if (options.onError) options.onError();
     },
   });

@@ -1,9 +1,9 @@
-import { useShowModal } from "../../hooks/useShowModal";
-import Modal from "../common/Modal";
-import ButtonPrimary from "../common/ButtonPrimary";
-import SearchInput from "../common/SearchInput";
-import Toast from "../common/Toast";
-import Form from './Form';
+import ButtonPrimary from "@/components/common/ButtonPrimary";
+import Modal from "@/components/common/Modal";
+import SearchInput from "@/components/common/SearchInput";
+import Toast from "@/components/common/Toast";
+import Form from "@/components/screen-setup/Form";
+import { useShowModal } from "@/hooks/useShowModal";
 
 const Header = ({ searchTerm, onChange }) => {
   const { isOpen, showModal, closeModal } = useShowModal();

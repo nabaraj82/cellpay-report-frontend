@@ -13,7 +13,7 @@ export const useUserCreateMutation = (queryKey, options = {}) => {
     },
       onError: (error) => {
         console.log(error)
-      toast.error(JSON.stringify(error) || "Failed to create user");
+      toast.error(JSON.stringify(error.message) || "Failed to create user");
       if (options.onError) options.onError();
     },
   });

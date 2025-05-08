@@ -12,7 +12,7 @@ export const useStatusMutation = (queryKey, options = {}) => {
       if (options.onSuccess) options.onSuccess();
     },
     onError: (error) => {
-      toast.error(JSON.stringify(error) || "Failed to update status");
+      toast.error(JSON.stringify(error.message) || "Failed to update status");
       if (options.onError) options.onError();
     },
   });

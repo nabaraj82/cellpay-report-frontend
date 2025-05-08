@@ -1,19 +1,17 @@
+import ButtonPrimary from "@/components/common/ButtonPrimary";
+import ButtonSecondary from "@/components/common/ButtonSecondary";
+import CustomSelect from "@/components/common/CustomSelect";
+import Input from "@/components/common/Input";
+import TextArea from "@/components/common/TextArea";
+import AddPrivilege from "@/components/module-setup/AddPrivilege";
+import { useCreateMutation } from "@/hooks/query/common/useCreateMutation";
+import { useGetAll } from "@/hooks/query/common/useGetAll";
+import { useUpdateMutation } from "@/hooks/query/common/useUpdateMutation";
+import { useGetModuleById } from "@/hooks/query/module/useGetModuleById";
+import { useValidateForm } from "@/validations/hooks/useValidateForm";
+import { moduleSchema, privilegesValidationSchema } from "@/validations/schema/moduleSchema";
 import React, { useEffect, useState } from "react";
-import CustomSelect from "../common/CustomSelect";
-import Input from "../common/Input";
-import TextArea from "../common/TextArea";
-import AddPrivilege from "./AddPrivilege";
-import ButtonSecondary from "../common/ButtonSecondary";
-import ButtonPrimary from "../common/ButtonPrimary";
-import { useGetAll } from "../../hooks/query/common/useGetAll";
-import { useValidateForm } from "../../validations/hooks/useValidateForm";
-import {
-  moduleSchema,
-  privilegesValidationSchema,
-} from "../../validations/schema/moduleSchema";
-import { useGetModuleById } from "../../hooks/query/module/useGetModuleById";
-import { useUpdateMutation } from "../../hooks/query/common/useUpdateMutation";
-import { useCreateMutation } from "../../hooks/query/common/useCreateMutation";
+
 
 const moduleInitialState = {
   id: "",

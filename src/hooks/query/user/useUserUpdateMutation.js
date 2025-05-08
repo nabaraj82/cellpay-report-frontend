@@ -14,7 +14,7 @@ export const useUserUpdateMutation = (queryKey, options = {}) => {
     },
     onError: (error) => {
       console.log(error);
-      toast.error(JSON.stringify(error) || "Failed to update user");
+      toast.error(JSON.stringify(error.message) || "Failed to update user");
       if (options.onError) options.onError();
     },
   });

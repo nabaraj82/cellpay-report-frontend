@@ -1,19 +1,20 @@
 import React, { useRef } from "react";
-import { columnHelper } from "../../util/tableHelper";
-import EditButton from "../common/EditButton";
-import DeleteButton from "../common/DeleteButton";
-import { DataTable } from "../table/DataTable";
-import Switch from "../common/Switch";
-import Badge from "../common/Badge";
-import { useStatusMutation } from "../../hooks/query/common/useStatusMutation";
-import Toast from "../common/Toast";
-import { useDeleteMutation } from "../../hooks/query/common/useDeleteMutation";
-import DeleteConfirmationModal from "../common/DeleteConfirmationModal";
-import ButtonSecondary from "../common/ButtonSecondary";
-import ButtonDanger from "../common/ButtonDanger";
-import { useShowModal } from "../../hooks/useShowModal";
-import Modal from "../common/Modal";
-import Form from "./Form";
+import EditButton from "@components/common/EditButton";
+import DeleteButton from "@/components/common/DeleteButton";
+
+import Modal from "@/components/common/Modal";
+import Toast from "@/components/common/Toast";
+import ButtonDanger from "@/components/common/ButtonDanger";
+import Switch from "@/components/common/Switch";
+import Badge from "@/components/common/Badge";
+import DeleteConfirmationModal from "@/components/common/DeleteConfirmationModal";
+import ButtonSecondary from "@/components/common/ButtonSecondary";
+import { DataTable } from "@/components/table/DataTable";
+import Form from "@/components/privilege-setup/Form";
+import { useStatusMutation } from "@/hooks/query/common/useStatusMutation";
+import { useDeleteMutation } from "@/hooks/query/common/useDeleteMutation";
+import { useShowModal } from "@/hooks/useShowModal";
+import { columnHelper } from "@/util/tableHelper";
 
 const Body = ({ data, searchTerm }) => {
     const itemToDeleteRef = useRef(null);

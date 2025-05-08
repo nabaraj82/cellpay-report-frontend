@@ -1,8 +1,8 @@
-import React from "react";
-import CheckboxGroup from "../../common/CheckboxGroup";
-import Switch from "../../common/Switch";
-import usePermissionUpdateMutation from "../../../hooks/query/role/usePermissionUpdateMutation";
-import { useRAPMutation } from "../../../hooks/query/role/useRAPMutation";
+import CheckboxGroup from "@/components/common/CheckboxGroup";
+import Switch from "@/components/common/Switch";
+import usePermissionUpdateMutation from "@/hooks/query/role/usePermissionUpdateMutation";
+import { useRAPMutation } from "@/hooks/query/role/useRAPMutation";
+
 
 const ModuleItem = ({ module, roleId }) => {
     const permissionMutation = usePermissionUpdateMutation(['role', roleId], '/permission');

@@ -1,20 +1,20 @@
-import { createColumnHelper } from "@tanstack/react-table";
 import React, { useRef } from "react";
-import EditButton from "../common/EditButton";
-import Switch from "../common/Switch";
-import Badge from "../common/Badge";
-import AvatarGroup from "../common/AvatarGroup";
+import { useStatusMutation } from "@/hooks/query/common/useStatusMutation";
+import { useShowModal } from "@/hooks/useShowModal";
+import { columnHelper } from "@/util/tableHelper";
+import Switch from "@/components/common/Switch";
+import Badge from "@/components/common/Badge";
+import AvatarGroup from "@/components/common/AvatarGroup";
+import EditButton from "@/components/common/EditButton";
+import Tooltip from "@/components/common/Tooltip";
 import { FiSettings, FiUserPlus } from "react-icons/fi";
-import { useStatusMutation } from "../../hooks/query/common/useStatusMutation";
-import Toast from "../common/Toast";
-import { useShowModal } from "../../hooks/useShowModal";
-import Modal from "../common/Modal";
-import RoleSetupForm from "./role-setup-form";
-import RoleForm from "./RoleForm";
-import AssignUserForm from "./AssignUserForm";
-import { DataTable } from "../table/DataTable";
-import { columnHelper } from "../../util/tableHelper";
-import Tooltip from "../common/Tooltip";
+import Toast from "@/components/common/Toast";
+import Modal from "@/components/common/Modal";
+import RoleForm from "@/components/role-setup/RoleForm";
+import RoleSetupForm from "@/components/role-setup/role-setup-form";
+import AssignUserForm from "@/components/role-setup/AssignUserForm";
+import { DataTable } from "@/components/table/DataTable";
+
 
 const Body = ({ data, searchTerm }) => {
   const statusMutation = useStatusMutation(["role"]);

@@ -13,7 +13,7 @@ const SearchInput = ({ value, onChange, ...rest }) => {
         onChange={onChange}
         type="text"
         placeholder="search..."
-        className="block w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md text-xs leading-5 bg-white dark:bg-gray-600 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500  "
+        className="block w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md text-sm leading-5 bg-white dark:bg-gray-600 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500  "
         {...rest}
       />
     </div>

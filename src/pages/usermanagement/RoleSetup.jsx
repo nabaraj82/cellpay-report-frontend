@@ -1,8 +1,9 @@
+import PageContainer from '@/components/common/PageContainer';
+import Body from '@/components/role-setup/Body';
+import Header from '@/components/role-setup/Header';
+import { useGetAll } from '@/hooks/query/common/useGetAll';
 import React, { useState } from 'react'
-import PageContainer from '../../components/common/PageContainer'
-import Header from '../../components/role-setup/Header'
-import Body from '../../components/role-setup/Body'
-import { useGetAll } from '../../hooks/query/common/useGetAll'
+
 
 const RoleSetup = () => {
   const [searchTerm, setSearchTerm] = useState('');

@@ -13,7 +13,7 @@ export const useRPSMutation = (queryKey, options = {}) => {
       if (options.onSuccess) options.onSuccess();
     },
     onError: (error) => {
-      toast.error(JSON.stringify(error) || "Failed to remove permission");
+      toast.error(JSON.stringify(error.message) || "Failed to remove permission");
       if (options.onError) options.onError();
     },
   });

@@ -131,13 +131,13 @@ export const CustomSelect = ({
       style={{width: width? `${width}px`: ''}}
     >
       {label && (
-        <label className="block group-focus-within:text-sky-500 text-xs font-medium duration-300">
+        <label className="block group-focus-within:text-sky-500 text-sm  font-medium duration-300">
           {label}
         </label>
       )}
       <div
         ref={selectRef}
-        className={`relative w-full text-xs  duration-300 mt-1 rounded-md border  outline-none focus:border-sky-500 ${className}`}
+        className={`relative w-full text-sm  duration-300 mt-1 rounded-md border  outline-none focus:border-sky-500 ${className}`}
         onKeyDown={handleKeyDown}
       >
         {/* Select Trigger */}
@@ -187,7 +187,7 @@ export const CustomSelect = ({
           >
             {/* Search Input */}
             {searchable && (
-              <div className="sticky top-0 p-2 text-xs bg-white dark:bg-gray-600 border-b border-gray-200 dark:border-gray-700">
+              <div className="sticky top-0 p-2 text-sm  bg-white dark:bg-gray-600 border-b border-gray-200 dark:border-gray-700">
                 <input
                   name="search"
                   ref={searchInputRef}
@@ -198,7 +198,7 @@ export const CustomSelect = ({
                     setSearchTerm(e.target.value);
                     setFocusedIndex(0); // Reset focus when search changes
                   }}
-                  className="w-full p-2 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full p-2 text-sm  border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                   aria-controls="select-options"
                 />
               </div>
@@ -237,7 +237,7 @@ export const CustomSelect = ({
                   </button>
                 ))
               ) : (
-                <div className="px-3 py-2 text-xs text-gray-500 text-center">
+                <div className="px-3 py-2 text-sm xl:text-lg text-gray-500 text-center">
                   {emptyMessage}
                 </div>
               )}
