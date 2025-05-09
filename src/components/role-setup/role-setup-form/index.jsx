@@ -1,29 +1,25 @@
-import ModuleSetting from "@/components/role-setup/role-setup-form/ModuleSetting";
+import React, { useMemo, useState } from "react";
 import Sidebar from "@/components/role-setup/role-setup-form/Sidebar";
+import ModuleSetting from "@/components/role-setup/role-setup-form/ModuleSetting";
 import { useGetRoleById } from "@/hooks/query/role/userGetRoleById";
-import React, { useState } from "react";
 
 const RoleSetupForm = ({ roleId }) => {
   const [activeScreenId, setActiveScreenId] = useState(null);
-  const { data } = useGetRoleById(roleId);
-  let activeScreen;
-  if (activeScreenId && data) {
-    activeScreen = data.find((item) => item.id === activeScreenId);
-  }
+  const { data: roleData = [] } = useGetRoleById(roleId);
+
+  const activeScreen = useMemo(() => {
+    return roleData.find((item) => item.id === activeScreenId) || null;
+  }, [activeScreenId, roleData]);
+
   return (
     <div className="flex gap-2">
       <Sidebar
-        data={data || []}
+        data={roleData}
+        roleId={roleId}
         activeScreenId={activeScreenId}
         setActiveScreenId={setActiveScreenId}
-        roleId={roleId}
       />
-      <ModuleSetting
-        key={roleId}
-        screen={activeScreen}
-        roleId={roleId}
-        setActiveScreenId={setActiveScreenId}
-      />
+      <ModuleSetting screen={activeScreen} roleId={roleId} />
     </div>
   );
 };

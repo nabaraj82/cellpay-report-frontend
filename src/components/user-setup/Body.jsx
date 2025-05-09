@@ -1,3 +1,5 @@
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { FiUserPlus } from "react-icons/fi";
 import Badge from "@/components/common/Badge";
 import EditButton from "@/components/common/EditButton";
 import Modal from "@/components/common/Modal";
@@ -10,27 +12,31 @@ import { useStatusMutation } from "@/hooks/query/common/useStatusMutation";
 import { useGetPaginatedUser } from "@/hooks/query/user/useGetPaginatedUser";
 import { useShowModal } from "@/hooks/useShowModal";
 import { columnHelper } from "@/util/tableHelper";
-import React, { useRef, useState } from "react";
-import { FiUserPlus } from "react-icons/fi";
 
-const Body = ({ searchTerm }) => {
-  const [{ pageIndex, pageSize }, setPagination] = useState({
+const UserManagementTable = ({ searchTerm }) => {
+  const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
+  const { pageIndex, pageSize } = pagination;
 
+  // Refs for modal data
   const userIdRef = useRef(null);
   const currentUserRef = useRef(null);
 
-  const { data, isFetching } = useGetPaginatedUser([
-    "user",
-    {
-      page: pageIndex + 1,
-      limit: pageSize,
-      active: true,
-    },
-  ]);
+  const currentPage = {
+    page: pageIndex + 1,
+    limit: pageSize,
+    active: true,
+  };
+
+  // Data fetching
+  const { data, isFetching } = useGetPaginatedUser(["user", currentPage]);
+
+  // Mutation for status change
   const statusMutation = useStatusMutation(["user"]);
+
+  // Modal controls
   const {
     isOpen: isAssignRoleModalOpen,
     showModal: showAssignRoleModal,
@@ -43,112 +49,131 @@ const Body = ({ searchTerm }) => {
     closeModal: closeUserEditModal,
   } = useShowModal();
 
-  const columns = [
-    columnHelper.display({
-      header: "S.N",
-      cell: ({ row: { index } }) => {
-        return pageIndex * pageSize + index + 1;
-      },
-    }),
-    columnHelper.accessor("name", {
-      header: "Name",
-    }),
-    columnHelper.accessor("nameLocal", {
-      header: "Local Name",
-    }),
-    columnHelper.accessor("code", {
-      header: "Code",
-    }),
-    columnHelper.accessor("mobileNumber", {
-      header: "Contact Number",
-    }),
-    columnHelper.accessor("email", {
-      header: "Email",
-    }),
-    columnHelper.display({
-      header: "Roles",
-      cell: ({ row: { original } }) => {
-        return (
-          <>
-            {original?.roles?.length > 0 ? (
-              <div className="flex gap-1">
-                {original.roles.map((role) => (
-                  <Badge key={role.id} badge={role.name} />
-                ))}
-              </div>
-            ) : (
-              <Badge badge="------" />
-            )}
-          </>
-        );
-      },
-    }),
-    columnHelper.accessor("active", {
-      header: "Status",
-      cell: ({ row: { original } }) => (
-        <div className="flex items-center">
-          <Switch
-            enabled={original.active}
-            onChange={() => statusMutation.mutate(original.id)}
-            id={original.id}
-          />
-          <Badge badge={original.active ? "Active" : "Inactive"} />
-        </div>
-      ),
-    }),
-    columnHelper.display({
-      header: "Actions",
-      cell: ({ row: { original } }) => {
-        const { id, name, email, mobileNumber, nameLocal } = original;
-        return (
-          <div className="flex gap-4">
-            <EditButton
-              onClick={() =>
-                handleOpenEditUserModal({
-                  id,
-                  name,
-                  email,
-                  mobileNumber,
-                  nameLocal,
-                })
-              }
-            />
-            <Tooltip content="assign role" position="left">
-              <button
-                className="cursor-pointer"
-                onClick={() => handleOpenAssignRoleModal(original.id)}
-              >
-                <FiUserPlus size={15} />
-              </button>
-            </Tooltip>
-          </div>
-        );
-      },
-      meta: {
-        sticky: "right", 
-      },
-    }),
-  ];
+  // Memoized data calculations
+  const users = useMemo(() => data?.data?.records || [], [data]);
+  const totalCount = useMemo(() => data?.data?.total || 0, [data]);
+  const pageCount = useMemo(
+    () => Math.ceil(totalCount / pageSize),
+    [totalCount, pageSize]
+  );
 
-  function handleOpenAssignRoleModal(userId) {
-    userIdRef.current = userId;
-    showAssignRoleModal();
-  }
+  // Modal handlers
+  const handleOpenAssignRoleModal = useCallback(
+    (userId) => {
+      userIdRef.current = userId;
+      showAssignRoleModal();
+    },
+    [showAssignRoleModal]
+  );
 
-  function handleCloseAssignRoleModal() {
+  const handleCloseAssignRoleModal = useCallback(() => {
     userIdRef.current = null;
     closeAssignRoleModal();
-  }
+  }, [closeAssignRoleModal]);
 
-  function handleOpenEditUserModal(user) {
-    currentUserRef.current = user;
-    showUserEditModal();
-  }
+  const handleOpenEditUserModal = useCallback(
+    (user) => {
+      currentUserRef.current = user;
+      showUserEditModal();
+    },
+    [showUserEditModal]
+  );
 
-  function handleCloseEditUserModal() {
+  const handleCloseEditUserModal = useCallback(() => {
     currentUserRef.current = null;
     closeUserEditModal();
-  }
+  }, [closeUserEditModal]);
+
+  // Memoized table columns
+  const columns = useMemo(
+    () => [
+      columnHelper.display({
+        header: "S.N",
+        cell: ({ row: { index } }) => pageIndex * pageSize + index + 1,
+      }),
+      columnHelper.accessor("name", {
+        header: "Name",
+      }),
+      columnHelper.accessor("nameLocal", {
+        header: "Local Name",
+      }),
+      columnHelper.accessor("code", {
+        header: "Code",
+      }),
+      columnHelper.accessor("mobileNumber", {
+        header: "Contact Number",
+      }),
+      columnHelper.accessor("email", {
+        header: "Email",
+      }),
+      columnHelper.display({
+        header: "Roles",
+        cell: ({ row: { original } }) =>
+          original?.roles?.length > 0 ? (
+            <div className="flex gap-1">
+              {original.roles.map((role) => (
+                <Badge key={role.id} badge={role.name} />
+              ))}
+            </div>
+          ) : (
+            <Badge badge="------" />
+          ),
+      }),
+      columnHelper.accessor("active", {
+        header: "Status",
+        cell: ({ row: { original } }) => (
+          <div className="flex items-center">
+            <Switch
+              enabled={original.active}
+              onChange={() => statusMutation.mutate(original.id)}
+              id={original.id}
+            />
+            <Badge badge={original.active ? "Active" : "Inactive"} />
+          </div>
+        ),
+      }),
+      columnHelper.display({
+        header: "Actions",
+        cell: ({ row: { original } }) => {
+          const { id, name, email, mobileNumber, nameLocal } = original;
+          return (
+            <div className="flex gap-4">
+              <EditButton
+                onClick={() =>
+                  handleOpenEditUserModal({
+                    id,
+                    name,
+                    email,
+                    mobileNumber,
+                    nameLocal,
+                  })
+                }
+              />
+              <Tooltip content="assign role" position="left">
+                <button
+                  className="cursor-pointer"
+                  onClick={() => handleOpenAssignRoleModal(id)}
+                  aria-label={`Assign role to ${name}`}
+                >
+                  <FiUserPlus size={15} />
+                </button>
+              </Tooltip>
+            </div>
+          );
+        },
+        meta: {
+          sticky: "right",
+        },
+      }),
+    ],
+    [
+      pageIndex,
+      pageSize,
+      statusMutation,
+      handleOpenEditUserModal,
+      handleOpenAssignRoleModal,
+    ]
+  );
 
   return (
     <>
@@ -165,17 +190,26 @@ const Body = ({ searchTerm }) => {
           />
         )}
       </Modal>
-      <Modal title="Edit User" isOpen={isUserEditModalOpen} onClose={handleCloseEditUserModal}>
-        <Form editingUser={currentUserRef.current} closeModal={handleCloseEditUserModal} />
+
+      <Modal
+        title="Edit User"
+        isOpen={isUserEditModalOpen}
+        onClose={handleCloseEditUserModal}
+      >
+        <Form
+          editingUser={currentUserRef.current}
+          closeModal={handleCloseEditUserModal}
+        />
       </Modal>
+
       <section className="mt-4 overflow-x-auto">
         <DataTable
-          data={data?.data?.records || []}
+          data={users}
           columns={columns}
-          totalCount={data?.data?.total}
-          pagination={{ pageIndex, pageSize }}
+          totalCount={totalCount}
+          pagination={pagination}
           onPaginationChange={setPagination}
-          pageCount={Math.ceil(data?.data?.total / pageSize)}
+          pageCount={pageCount}
           isServerSide={true}
           isLoading={isFetching}
           enableFuzzyFilter={true}
@@ -187,4 +221,4 @@ const Body = ({ searchTerm }) => {
   );
 };
 
-export default Body;
+export default React.memo(UserManagementTable);

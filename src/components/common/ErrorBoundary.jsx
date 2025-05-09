@@ -1,10 +1,20 @@
-// components/ErrorBoundary.jsx
 import React, { Component } from "react";
+import { FiAlertTriangle, FiRefreshCw } from "react-icons/fi";
+
+// Example placeholder for external logging service (e.g., Sentry)
+function logErrorToService(error, errorInfo) {
+  // Replace with your logging logic
+  console.log("Logging error to service:", error, errorInfo);
+}
 
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = {
+      hasError: false,
+      error: null,
+      errorInfo: null,
+    };
   }
 
   static getDerivedStateFromError(error) {
@@ -12,21 +22,72 @@ class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo);
+    this.setState({ errorInfo });
+
+    // Log the error only in production (or always, depending on your use case)
+    if (!process.env.NODE_ENV === "production") {
+      console.error("Error caught by ErrorBoundary:", error, errorInfo);
+    }
   }
+
+  handleReset = () => {
+    this.setState({ hasError: false, error: null, errorInfo: null });
+    if (this.props.onReset) {
+      this.props.onReset();
+    }
+  };
 
   render() {
     if (this.state.hasError) {
+      const { error, errorInfo } = this.state;
+      const isDev = process.env.NODE_ENV !== "production";
+
       return (
-        <div className="p-4 bg-red-50 border-l-4 border-red-500">
-          <h3 className="text-red-700 font-medium">Component Error</h3>
-          <p className="text-red-600">{this.state.error.toString()}</p>
-          <button
-            onClick={() => this.setState({ hasError: false })}
-            className="mt-2 px-3 py-1 bg-red-100 text-red-700 rounded"
-          >
-            Try Again
-          </button>
+        <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+          <div className="text-center">
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+              <FiAlertTriangle className="h-6 w-6 text-red-600" />
+            </div>
+            <h3 className="mt-3 text-lg font-medium text-gray-900">
+              Something went wrong
+            </h3>
+            <div className="mt-2 text-sm text-gray-500">
+              <p>We're sorry for the inconvenience. Please try again.</p>
+
+              {isDev && (
+                <details className="mt-3">
+                  <summary className="text-red-600 cursor-pointer">
+                    Technical details
+                  </summary>
+                  <div className="mt-2 p-3 bg-gray-50 rounded text-xs font-mono overflow-x-auto">
+                    <p className="font-semibold">{error?.toString()}</p>
+                    {errorInfo?.componentStack && (
+                      <pre className="mt-2 text-gray-600">
+                        {errorInfo.componentStack}
+                      </pre>
+                    )}
+                  </div>
+                </details>
+              )}
+            </div>
+
+            <div className="mt-5">
+              <button
+                type="button"
+                onClick={this.handleReset}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                <FiRefreshCw className="-ml-1 mr-2 h-4 w-4" />
+                Try again
+              </button>
+            </div>
+
+            {this.props.contactSupport && (
+              <div className="mt-4 text-xs text-gray-500">
+                Need help? {this.props.contactSupport}
+              </div>
+            )}
+          </div>
         </div>
       );
     }

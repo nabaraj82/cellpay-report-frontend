@@ -1,4 +1,4 @@
-import {  useRef} from "react";
+import { useRef, useMemo } from "react";
 import { useDeleteMutation } from "@/hooks/query/common/useDeleteMutation";
 import { useShowModal } from "@/hooks/useShowModal";
 import { columnHelper } from "@/util/tableHelper";
@@ -12,17 +12,16 @@ import ButtonDanger from "@/components/common/ButtonDanger";
 import { DataTable } from "@/components/table/DataTable";
 import EditButton from "@/components/common/EditButton";
 
-
 const Body = ({ data, globalFilter }) => {
-
   const editScreenRef = useRef(null);
-
   const itemToDeleteRef = useRef(null);
+
   const {
     isOpen: isDeleteModalOpen,
     showModal: showDeleteModal,
     closeModal: closeDeleteModal,
   } = useShowModal();
+
   const {
     isOpen: isEditModalOpen,
     showModal: showEditModal,
@@ -39,58 +38,50 @@ const Body = ({ data, globalFilter }) => {
     },
   });
 
-  function handleDelete(id) {
+  const handleDelete = (id) => {
     itemToDeleteRef.current = id;
     showDeleteModal(true);
-  }
+  };
 
-  function handleEdit(screenData) {
+  const handleEdit = (screenData) => {
     const { id, code, name, description } = screenData;
     editScreenRef.current = { id, code, name, description };
     showEditModal();
-  }
+  };
 
-  function handleCloseEdit() {
-    closeEditModal();
-  }
-
-  function handleConfirmDelete() {
+  const handleConfirmDelete = () => {
     if (itemToDeleteRef.current) {
       deleteMutation.mutate(itemToDeleteRef.current);
     }
-  }
+  };
 
-  const columns = [
-    columnHelper.accessor("id", {
-      header: "S.N",
-      cell: ({ row: { index } }) => {
-        return index + 1;
-      },
-    }),
-    columnHelper.accessor("code", {
-      header: "Screen Code",
-    }),
-    columnHelper.accessor("name", {
-      header: "Screen Name",
-    }),
-    columnHelper.accessor("description", {
-      header: "Description",
-    }),
-    columnHelper.display({
-      id: "actions",
-      header: "Actions",
-      cell: (info) => (
-        <div className="flex gap-4">
-          <EditButton onClick={() => handleEdit(info.row.original)} />
-          <DeleteButton onClick={() => handleDelete(info.row.original.id)} />
-        </div>
-      ),
-    }),
-  ];
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("id", {
+        header: "S.N",
+        cell: ({ row: { index } }) => index + 1,
+      }),
+      columnHelper.accessor("code", { header: "Screen Code" }),
+      columnHelper.accessor("name", { header: "Screen Name" }),
+      columnHelper.accessor("description", { header: "Description" }),
+      columnHelper.display({
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => (
+          <div className="flex gap-4">
+            <EditButton onClick={() => handleEdit(row.original)} />
+            <DeleteButton onClick={() => handleDelete(row.original.id)} />
+          </div>
+        ),
+      }),
+    ],
+    []
+  );
 
   return (
     <>
       <Toast />
+
       <Modal
         title="Edit Screen"
         isOpen={isEditModalOpen}
@@ -99,14 +90,15 @@ const Body = ({ data, globalFilter }) => {
         <Form
           key={editScreenRef.current?.id || "update"}
           editingData={editScreenRef.current}
-          closeModal={handleCloseEdit}
+          closeModal={closeEditModal}
         />
       </Modal>
+
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={closeDeleteModal}
       >
-        <div className="flex gap-2 justify-end md:min-w-[20rem] mt-4">
+        <div className="flex justify-end gap-2 md:min-w-[20rem] mt-4">
           <ButtonSecondary type="button" onClick={closeDeleteModal}>
             No
           </ButtonSecondary>
@@ -115,6 +107,7 @@ const Body = ({ data, globalFilter }) => {
           </ButtonDanger>
         </div>
       </DeleteConfirmationModal>
+
       <section className="mt-4 overflow-x-auto">
         <DataTable
           data={data}

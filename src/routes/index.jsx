@@ -22,7 +22,6 @@ const ModuleSetup = lazy(() =>
 );
 
 const RootLayout = lazy(() => import("../layout/RootLayout"));
-// const RootLayoutWrapper = lazy(() => import("../layout/RootLayoutWrapper"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Profile = lazy(() => import("../pages/Profile"));
 const ChangePassword = lazy(() => import("@/pages/ChangePassword"));
@@ -33,9 +32,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ErrorBoundary>
-            <RootLayout />
-          {/* <RootLayoutWrapper>
-          </RootLayoutWrapper> */}
+          <RootLayout />
         </ErrorBoundary>
       </ProtectedRoute>
     ),
@@ -115,7 +112,7 @@ const router = createBrowserRouter([
       },
       {
         path: "change-password",
-        element: <ChangePassword />
+        element: <ChangePassword />,
       },
       {
         path: "*",

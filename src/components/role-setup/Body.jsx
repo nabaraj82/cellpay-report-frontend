@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import { useStatusMutation } from "@/hooks/query/common/useStatusMutation";
 import { useShowModal } from "@/hooks/useShowModal";
 import { columnHelper } from "@/util/tableHelper";
@@ -15,56 +15,46 @@ import RoleSetupForm from "@/components/role-setup/role-setup-form";
 import AssignUserForm from "@/components/role-setup/AssignUserForm";
 import { DataTable } from "@/components/table/DataTable";
 
-
-const Body = ({ data, searchTerm }) => {
-  const statusMutation = useStatusMutation(["role"]);
+const Body = ({ data = [], searchTerm = "" }) => {
+  // Refs for managing state without re-renders
   const roleIdRef = useRef(null);
   const editingRoleRef = useRef(null);
-  const {
-    isOpen: isRoleSetupModalOpen,
-    showModal: showRoleSetupModal,
-    closeModal: closeRoleSetupModal,
-  } = useShowModal();
 
-  const {
-    isOpen: isRoleFormModalOpen,
-    showModal: showRoleFormModal,
-    closeModal: closeRoleFromModal,
-  } = useShowModal();
-  const {
-    isOpen: isAssignRoleModalOpen,
-    showModal: showAssignRoleModal,
-    closeModal: closeAssignRoleModal,
-  } = useShowModal();
+  // Status mutation with optimized query key
+  const statusMutation = useStatusMutation(["role"]);
 
-  const columns = [
-    columnHelper.display({
-      id: "s.n",
-      header: "S.N",
-      cell: ({ row: { index } }) => {
-        return index + 1;
-      },
-    }),
-    columnHelper.accessor("name", {
-      header: "Role Name",
-    }),
-    columnHelper.accessor("isActive", {
-      header: "Status",
-      cell: ({ row: { original } }) => (
-        <div className="flex items-center">
-          <Switch
-            enabled={original.isActive}
-            onChange={() => statusMutation.mutate(original.id)}
-            id={original.id}
-          />
-          <Badge badge={original.isActive ? "Active" : "Inactive"} />
-        </div>
-      ),
-    }),
-    columnHelper.accessor("userCount", {
-      header: "Users",
-      cell: ({ row: { original } }) => {
-        return (
+  // Modal management hooks
+  const roleSetupModal = useShowModal();
+  const roleFormModal = useShowModal();
+  const assignRoleModal = useShowModal();
+
+  // Memoized columns to prevent unnecessary re-renders
+  const columns = useMemo(
+    () => [
+      columnHelper.display({
+        id: "s.n",
+        header: "S.N",
+        cell: ({ row: { index } }) => index + 1,
+      }),
+      columnHelper.accessor("name", {
+        header: "Role Name",
+      }),
+      columnHelper.accessor("isActive", {
+        header: "Status",
+        cell: ({ row: { original } }) => (
+          <div className="flex items-center">
+            <Switch
+              enabled={original.isActive}
+              onChange={() => statusMutation.mutate(original.id)}
+              id={original.id}
+            />
+            <Badge badge={original.isActive ? "Active" : "Inactive"} />
+          </div>
+        ),
+      }),
+      columnHelper.accessor("userCount", {
+        header: "Users",
+        cell: ({ row: { original } }) => (
           <div className="flex gap-1">
             {original.userCount === 0 ? (
               <span className="tracking-wider">assign user</span>
@@ -72,72 +62,91 @@ const Body = ({ data, searchTerm }) => {
               <AvatarGroup userCount={original.userCount} />
             )}
           </div>
-        );
-      },
-    }),
-    columnHelper.display({
-      id: "actions",
-      header: "Actions",
-      cell: ({ row: { original } }) => (
-        <div className="flex gap-4">
-          <EditButton onClick={() => handleOpenEditRoleModal(original)} />
-          <Tooltip content="assign permission" position="left">
-          <button
-            className="cursor-pointer"
-            onClick={() => handleOpenRoleSetupModal(original.id)}
-          >
-            <FiSettings size={15} />
-          </button>
-          </Tooltip>
-          <Tooltip content="assign user" position="left">
-          <button
-            className="cursor-pointer"
-            onClick={() => handleOpenAssignRoleModal(original.id)}
-          >
-            <FiUserPlus size={15} />
-          </button>
-          </Tooltip>
-        </div>
-      ),
-    }),
-  ];
+        ),
+      }),
+      columnHelper.display({
+        id: "actions",
+        header: "Actions",
+        cell: ({ row: { original } }) => (
+          <div className="flex gap-4">
+            <EditButton onClick={() => handleOpenEditRoleModal(original)} />
+            <Tooltip content="assign permission" position="left">
+              <button
+                className="cursor-pointer"
+                onClick={() => handleOpenRoleSetupModal(original.id)}
+                aria-label="Assign permissions"
+              >
+                <FiSettings size={15} />
+              </button>
+            </Tooltip>
+            <Tooltip content="assign user" position="left">
+              <button
+                className="cursor-pointer"
+                onClick={() => handleOpenAssignRoleModal(original.id)}
+                aria-label="Assign users"
+              >
+                <FiUserPlus size={15} />
+              </button>
+            </Tooltip>
+          </div>
+        ),
+      }),
+    ],
+    [statusMutation]
+  );
 
-  function handleOpenRoleSetupModal(roleId) {
+  // Modal handlers with useCallback for stable references
+  const handleOpenRoleSetupModal = useCallback((roleId) => {
     roleIdRef.current = roleId;
-    showRoleSetupModal();
-  }
+    roleSetupModal.showModal();
+  }, []);
 
-  function handleCloseRoleSetupModal() {
+  const handleCloseRoleSetupModal = useCallback(() => {
     roleIdRef.current = null;
-    closeRoleSetupModal();
-  }
+    roleSetupModal.closeModal();
+  }, []);
 
-  function handleOpenEditRoleModal(role) {
+  const handleOpenEditRoleModal = useCallback((role) => {
     editingRoleRef.current = role;
-    showRoleFormModal();
-  }
+    roleFormModal.showModal();
+  }, []);
 
-  function handleCloseEditRoleModal() {
+  const handleCloseEditRoleModal = useCallback(() => {
     editingRoleRef.current = null;
-    closeRoleFromModal();
-  }
+    roleFormModal.closeModal();
+  }, []);
 
-  function handleOpenAssignRoleModal(roleId) {
+  const handleOpenAssignRoleModal = useCallback((roleId) => {
     roleIdRef.current = roleId;
-    showAssignRoleModal();
-  }
+    assignRoleModal.showModal();
+  }, []);
 
-  function handleCloseAssignRoleModal() {
+  const handleCloseAssignRoleModal = useCallback(() => {
     roleIdRef.current = null;
-    closeAssignRoleModal();
-  }
+    assignRoleModal.closeModal();
+  }, []);
+
+  // Memoized DataTable props
+  const dataTableProps = useMemo(
+    () => ({
+      data,
+      columns,
+      isServerSide: false,
+      enableFuzzyFilter: true,
+      enableVirtualization: true,
+      globalFilter: searchTerm,
+    }),
+    [data, columns, searchTerm]
+  );
 
   return (
     <>
       <Toast />
+
+      {/* Edit Role Modal */}
       <Modal
         title="Edit Role"
-        isOpen={isRoleFormModalOpen}
+        isOpen={roleFormModal.isOpen}
         onClose={handleCloseEditRoleModal}
       >
         <RoleForm
@@ -145,9 +154,11 @@ const Body = ({ data, searchTerm }) => {
           editingRole={editingRoleRef.current}
         />
       </Modal>
+
+      {/* Role Setup Modal */}
       <Modal
         title="Role Setup"
-        isOpen={isRoleSetupModalOpen}
+        isOpen={roleSetupModal.isOpen}
         onClose={handleCloseRoleSetupModal}
         isCloseButton
       >
@@ -157,12 +168,14 @@ const Body = ({ data, searchTerm }) => {
           onCloseModal={handleCloseRoleSetupModal}
         />
       </Modal>
+
+      {/* Assign Role Modal */}
       <Modal
         title="Assign Role"
-        isOpen={isAssignRoleModalOpen}
+        isOpen={assignRoleModal.isOpen}
         onClose={handleCloseAssignRoleModal}
       >
-        {isAssignRoleModalOpen && (
+        {assignRoleModal.isOpen && (
           <AssignUserForm
             key={roleIdRef.current}
             roleId={roleIdRef.current}
@@ -170,19 +183,13 @@ const Body = ({ data, searchTerm }) => {
           />
         )}
       </Modal>
-      <Toast />
+
+      {/* Data Table Section */}
       <section className="mt-4 overflow-x-auto">
-       <DataTable
-                 data={data}
-                 columns={columns}
-                 isServerSide={false}
-                 enableFuzzyFilter={true}
-                 enableVirtualization={true}
-          globalFilter={searchTerm}
-        />
+        <DataTable {...dataTableProps} />
       </section>
     </>
   );
 };
 
-export default Body;
+export default React.memo(Body);
