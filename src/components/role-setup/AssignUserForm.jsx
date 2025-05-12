@@ -33,7 +33,11 @@ const AssignUserForm = ({ roleId, closeAssignRoleModal }) => {
   } = useShowModal();
 
   // Memoize today's date to prevent recalculation on every render
-  const today = useMemo(() => new Date().toISOString().split("T")[0], []);
+ const today = useMemo(() => {
+    const now = new Date();
+    return now.toLocaleDateString("en-CA"); // 'en-CA' gives YYYY-MM-DD format
+  }, []);
+
 
   // Data fetching with memoized query parameters
   const queryParams = useMemo(() => ({ id: roleId }), [roleId]);

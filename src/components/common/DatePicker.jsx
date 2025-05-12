@@ -26,7 +26,7 @@ const CustomDatePicker = ({
             const syntheticEvent = {
               target: {
                 name,
-                value: date?.toISOString().split("T")[0],
+                value: date?.toLocaleDateString("en-CA"),
               },
             };
             onChange(syntheticEvent);

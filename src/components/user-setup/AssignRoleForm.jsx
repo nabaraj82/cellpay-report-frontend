@@ -27,7 +27,10 @@ const AssignRoleForm = ({ userId, closeAssignRoleModal }) => {
   const roleDeleteRef = useRef(null);
 
   // Memoize today's date to prevent recalculation on every render
-  const today = useMemo(() => new Date().toISOString().split("T")[0], []);
+  const today = useMemo(() => {
+    const now = new Date();
+    return now.toLocaleDateString("en-CA"); // 'en-CA' gives YYYY-MM-DD format
+  }, []);
 
   // Data fetching
   const queryParams = useMemo(() => ({ id: userId }), [userId]);
@@ -222,7 +225,7 @@ const AssignRoleForm = ({ userId, closeAssignRoleModal }) => {
             Close
           </ButtonSecondary>
           <ButtonDanger onClick={handleReset}>Reset</ButtonDanger>
-          <ButtonPrimary type="button" onClick={handleSubmit}>
+          <ButtonPrimary type="button" disabled={assignRoleMutation.isPending} onClick={handleSubmit}>
             Assign
           </ButtonPrimary>
         </div>
