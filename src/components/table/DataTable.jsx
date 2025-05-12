@@ -196,8 +196,8 @@ export function DataTable({
                           key={cell.id}
                           className={
                             cell.column.columnDef.meta?.sticky
-                              ? "px-4 py-4 text-sm whitespace-nowrap sticky z-[1] right-0 bg-white dark:bg-gray-600 dark:text-gray-300 group-hover:bg-gray-200 duration-300 dark:group-hover:bg-gray-600"
-                              : "px-4 py-4 text-sm xl:text-base whitespace-nowrap dark:bg-gray-600 dark:text-gray-300"
+                              ? "px-4 py-4 text-sm  sticky z-[1] right-0 bg-white dark:bg-gray-600 dark:text-gray-300 group-hover:bg-gray-200 duration-300 dark:group-hover:bg-gray-600"
+                              : "px-4 py-4 text-sm xl:text-base  dark:bg-gray-600 dark:text-gray-300"
                           }
                         >
                           {flexRender(
@@ -221,7 +221,7 @@ export function DataTable({
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="px-6 py-4 whitespace-nowrap"
+                      className="px-6 py-4"
                       data-sticky-td={
                         cell.column.columnDef.meta?.sticky ? "true" : undefined
                       }

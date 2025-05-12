@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import { FiAlertTriangle, FiRefreshCw } from "react-icons/fi";
-
-// Example placeholder for external logging service (e.g., Sentry)
-function logErrorToService(error, errorInfo) {
-  // Replace with your logging logic
-  console.log("Logging error to service:", error, errorInfo);
-}
+import * as Sentry from "@sentry/react";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -24,8 +19,11 @@ class ErrorBoundary extends Component {
   componentDidCatch(error, errorInfo) {
     this.setState({ errorInfo });
 
-    // Log the error only in production (or always, depending on your use case)
-    if (!process.env.NODE_ENV === "production") {
+    // Log to Sentry (only in production by default)
+    Sentry.captureException(error, { extra: { errorInfo } });
+
+    // Optional: Log to console in development
+    if (process.env.NODE_ENV === "development") {
       console.error("Error caught by ErrorBoundary:", error, errorInfo);
     }
   }

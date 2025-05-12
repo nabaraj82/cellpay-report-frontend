@@ -1,9 +1,9 @@
 import * as yup from "yup";
 
 export const moduleSchema = yup.object().shape({
-    name: yup.string().required('Name is required'),
-    code: yup.string().required("Code is required"),
-    description: yup.string().required("Description is required").min(20, "Description must be at least 20 characters"),
+    name: yup.string().required('Name is required').min(3, "minimum 3 characters required").max(20, "maximum 20 characters allowed"),
+    code: yup.string().required("Code is required").min(3, "minimum 3 characters required").max(10, "maximum 10 characters are allowed"),
+    description: yup.string().required("Description is required").min(10, "Description must be at least 20 characters").max(50, 'maximum 50 characters allowed'),
     screenId: yup.string().required('Screen is required')
 });
 

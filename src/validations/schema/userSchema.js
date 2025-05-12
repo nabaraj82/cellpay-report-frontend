@@ -1,9 +1,21 @@
 import * as yup from "yup";
 
 const userSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  nameLocal: yup.string().required("Local Name is required"),
-  code: yup.string().required("Code is required"),
+  name: yup
+    .string()
+    .required("Name is required")
+    .min(3, "minimum 3 characters required")
+    .max(20, "maximum 20 characters allowed"),
+  nameLocal: yup
+    .string()
+    .required("Local Name is required")
+    .min(3, "minium 3 characters required")
+    .max(20, "maximum 20 characters allowed"),
+  code: yup
+    .string()
+    .required("Code is required")
+    .min(3, "minium 3 characters required")
+    .max(20, "maximum 10 characters allowed"),
   email: yup.string().email("Invalid email").required("Email is required"),
   mobileNumber: yup
     .string()

@@ -3,8 +3,17 @@ const Dashboard = () => {
 
 
   return (
-    <div>Dashboard</div>
-  )
+    <div>
+      <button
+        onClick={() => {
+          throw new Error("This is your first error!");
+        }}
+      >
+       Error Generator
+      </button>
+      ;
+    </div>
+  );
 }
 
 export default Dashboard
